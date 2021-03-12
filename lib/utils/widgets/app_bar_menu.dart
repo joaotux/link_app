@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_app/utils/navigator_to.dart';
 
 class AppBarMenu extends StatefulWidget with PreferredSizeWidget {
   AppBarMenu({Key key}) : super(key: key);
@@ -27,7 +28,9 @@ class _AppBarMenuState extends State<AppBarMenu> {
           Container(
             margin: EdgeInsets.only(right: 20),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  NavigatorTo.to(context, "/home");
+                },
                 child: Text("Visão Geral",
                     style: TextStyle(color: Colors.white, fontSize: 16))),
           ),
@@ -51,26 +54,24 @@ class _AppBarMenuState extends State<AppBarMenu> {
                       color: Colors.white,
                     ),
                     underline: Container(),
-                    value: 1,
+                    hint: Text("Cadastros",
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
                     items: [
                       DropdownMenuItem(
-                        value: 1,
+                        value: "Cadastros",
                         child: Text(
-                          "Venda",
+                          "Cadastros",
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ),
                       DropdownMenuItem(
-                        value: 2,
-                        child: Text("Venda 1",
+                        value: "/product",
+                        child: Text("Produto",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 16)),
-                        onTap: () {
-                          print("Vanda 1");
-                        },
                       ),
                       DropdownMenuItem(
-                        value: 3,
+                        value: "Cadastros",
                         child: Text("Venda 2",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 16)),
@@ -79,7 +80,7 @@ class _AppBarMenuState extends State<AppBarMenu> {
                         },
                       ),
                       DropdownMenuItem(
-                        value: 4,
+                        value: "Cadastros",
                         child: Text("Venda 3",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 16)),
@@ -89,7 +90,7 @@ class _AppBarMenuState extends State<AppBarMenu> {
                       ),
                     ],
                     onChanged: (value) {
-                      setState(() {});
+                      NavigatorTo.to(context, value);
                     })),
           ),
           Container(
