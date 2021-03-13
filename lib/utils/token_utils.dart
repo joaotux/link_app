@@ -1,0 +1,3 @@
+class TokenUtils {
+  String token;
+}

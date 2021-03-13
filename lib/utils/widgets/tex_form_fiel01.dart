@@ -6,6 +6,7 @@ class TextFormField01 extends StatefulWidget {
   TextInputFormatter format;
   String hintText;
   bool obscureText;
+  int maxLines;
   EdgeInsetsGeometry margin;
   String msgErro;
   Function(String value) validation;
@@ -16,6 +17,7 @@ class TextFormField01 extends StatefulWidget {
       @required this.hintText,
       this.format,
       this.obscureText = false,
+      this.maxLines = 1,
       this.margin,
       this.msgErro = "Campo obrigatório",
       this.validation})
@@ -44,6 +46,7 @@ class _TextFormField01State extends State<TextFormField01> {
             ? (value) => value.isEmpty ? widget.msgErro : null
             : widget.validation,
         controller: widget.controller,
+        maxLines: widget.maxLines,
         inputFormatters: widget.format != null ? [widget.format] : [],
         obscureText: !_passwordVisible,
         decoration: InputDecoration(

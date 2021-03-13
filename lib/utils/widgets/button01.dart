@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class Button01 extends StatelessWidget {
   final Function function;
   final Color color;
+  final Color colorText;
   final String title;
   final bool loader;
   const Button01(
       {Key key,
       @required this.function,
       this.color,
+      this.colorText,
       @required this.title,
       this.loader = false})
       : super(key: key);
@@ -17,6 +19,9 @@ class Button01 extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color =
         this.color == null ? Theme.of(context).primaryColor : this.color;
+
+        Color colorText =
+        this.colorText == null ? Colors.white : this.colorText;
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -34,7 +39,7 @@ class Button01 extends StatelessWidget {
               )
             : Text(
                 this.title,
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: colorText, fontSize: 18),
               ),
         color: color,
       ),

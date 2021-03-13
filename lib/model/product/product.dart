@@ -4,6 +4,7 @@ class Product {
   int _id;
   String _description;
   String _code;
+  String _barCode;
   int _priceSales;
   double _priceCost;
   String _note;
@@ -13,6 +14,7 @@ class Product {
       {int id,
       String description,
       String code,
+      String barCode,
       int priceSales,
       double priceCost,
       String note,
@@ -20,6 +22,7 @@ class Product {
     this._id = id;
     this._description = description;
     this._code = code;
+    this._barCode = barCode;
     this._priceSales = priceSales;
     this._priceCost = priceCost;
     this._note = note;
@@ -32,6 +35,8 @@ class Product {
   set description(String description) => _description = description;
   String get code => _code;
   set code(String code) => _code = code;
+  String get barCode => _barCode;
+  set barCode(String barCod) => _barCode = barCode;
   int get priceSales => _priceSales;
   set priceSales(int priceSales) => _priceSales = priceSales;
   double get priceCost => _priceCost;
@@ -45,6 +50,7 @@ class Product {
     _id = json['id'];
     _description = json['description'];
     _code = json['code'];
+    _barCode = json['barCode'];
     _priceSales = json['priceSales'];
     _priceCost = json['priceCost'];
     _note = json['note'];
@@ -61,6 +67,7 @@ class Product {
     data['id'] = this._id;
     data['description'] = this._description;
     data['code'] = this._code;
+    data['barCode'] = this._barCode;
     data['priceSales'] = this._priceSales;
     data['priceCost'] = this._priceCost;
     data['note'] = this._note;
