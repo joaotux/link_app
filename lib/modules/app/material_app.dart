@@ -6,6 +6,7 @@ import 'package:link_app/modules/app/splash_screen_initial.dart';
 import 'package:link_app/modules/forgout_password/forgout_password_page.dart';
 import 'package:link_app/modules/home/home_page.dart';
 import 'package:link_app/modules/login/login_page.dart';
+import 'package:link_app/modules/product/product_list.dart';
 import 'package:link_app/modules/product/product_page.dart';
 import 'package:link_app/utils/colors_default.dart';
 import 'package:link_app/utils/token_utils.dart';
@@ -24,7 +25,8 @@ class MaterialAPP extends StatelessWidget {
         "/account_create": (context) => AccountCreate(),
         "/forgout_password": (context) => ForgoutPasswordPage(),
         "/home": (context) => HomePage(),
-        "/product": (context) => ProductPage()
+        "/product": (context) => ProductList(),
+        "/product/form": (context) => ProductPage()
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

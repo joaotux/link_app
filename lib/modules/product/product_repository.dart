@@ -22,4 +22,17 @@ class ProductRepository {
     }
     return product;
   }
+
+  Future<List<Product>> list() async {
+    List<Product> list = [];
+    try {
+      _response = await DioConfig.getDio().get("/product");
+      for (var p in _response.data) {
+        list.add(Product.fromJson(p));
+      }
+    } catch (e) {
+      print("e === $e");
+    }
+    return list;
+  }
 }

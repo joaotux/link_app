@@ -1,4 +1,6 @@
+import 'package:link_app/model/product/product_category.dart';
 import 'package:link_app/model/product/product_stock.dart';
+import 'package:link_app/model/provider.dart';
 
 class Product {
   int _id;
@@ -8,6 +10,8 @@ class Product {
   int _priceSales;
   double _priceCost;
   String _note;
+  ProductCategory _category;
+  Provider _provider;
   List<ProductStock> _stocks;
 
   Product(
@@ -18,6 +22,8 @@ class Product {
       int priceSales,
       double priceCost,
       String note,
+      ProductCategory category,
+      Provider provider,
       List<ProductStock> stocks}) {
     this._id = id;
     this._description = description;
@@ -26,6 +32,8 @@ class Product {
     this._priceSales = priceSales;
     this._priceCost = priceCost;
     this._note = note;
+    this._category = category;
+    this._provider = provider;
     this._stocks = stocks;
   }
 
@@ -43,6 +51,10 @@ class Product {
   set priceCost(double priceCost) => _priceCost = priceCost;
   String get note => _note;
   set note(String note) => _note = note;
+  ProductCategory get category => _category;
+  set category(ProductCategory category) => _category = category;
+  Provider get provider => _provider;
+  set provider(Provider provider) => _provider = provider;
   List<ProductStock> get stocks => _stocks;
   set stocks(List<ProductStock> stocks) => _stocks = stocks;
 
@@ -54,6 +66,12 @@ class Product {
     _priceSales = json['priceSales'];
     _priceCost = json['priceCost'];
     _note = json['note'];
+    _category = json['category'] != null
+        ? new ProductCategory.fromJson(json['category'])
+        : null;
+    _provider = json['provider'] != null
+        ? new Provider.fromJson(json['provider'])
+        : null;
     if (json['stocks'] != null) {
       _stocks = [];
       json['stocks'].forEach((v) {
@@ -71,6 +89,12 @@ class Product {
     data['priceSales'] = this._priceSales;
     data['priceCost'] = this._priceCost;
     data['note'] = this._note;
+    if (this._category != null) {
+      data['category'] = this._category.toJson();
+    }
+    if (this._provider != null) {
+      data['provider'] = this._provider.toJson();
+    }
     if (this._stocks != null) {
       data['stocks'] = this._stocks.map((v) => v.toJson()).toList();
     }

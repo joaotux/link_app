@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:link_app/model/product/product.dart';
 import 'package:link_app/model/product/product_category.dart';
 import 'package:link_app/model/product/product_stock.dart';
+import 'package:link_app/model/provider.dart';
 import 'package:link_app/modules/product/product_repository.dart';
 import 'package:link_app/modules/product_category/product_category_repository.dart';
+import 'package:link_app/modules/provider/provider_repository.dart';
+import 'package:link_app/utils/colors_default.dart';
 import 'package:link_app/utils/number_format.dart';
 import 'package:link_app/utils/widgets/app_bar_menu.dart';
 import 'package:link_app/utils/widgets/button01.dart';
@@ -16,47 +20,6 @@ class ProductPage extends StatefulWidget {
 
   @override
   _ProductPageState createState() => _ProductPageState();
-}
-
-var _id;
-var _descriptionController = TextEditingController();
-var _codeController = TextEditingController();
-var _barCodeController = TextEditingController();
-var _salesController =
-    MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
-var _costController =
-    MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
-var _stockCurrentController =
-    MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
-var _stockMaxController =
-    MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
-var _stockMinController =
-    MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
-var _noteController = TextEditingController();
-
-var _repository = ProductRepository();
-var _prodCatRepository = ProductCategoryRepository();
-var _key = GlobalKey<ScaffoldState>();
-
-List<ProductCategory> _categories;
-ProductCategory _category;
-
-double _width(BuildContext context, double porcent) {
-  return (MediaQuery.of(context).size.width * porcent) / 100;
-}
-
-_create(Product product) async {
-  product = await _repository.create(product, _key);
-}
-
-Future<List<ProductCategory>> _listCategories() async {
-  print("passei aqui ==============");
-  if (_categories == null) {
-    _categories = await _prodCatRepository.list();
-    if (_categories.isNotEmpty) _category = _categories.elementAt(0);
-  }
-
-  return Future.value(_categories);
 }
 
 class _ProductPageState extends State<ProductPage> {
@@ -133,6 +96,9 @@ class _ProductPageState extends State<ProductPage> {
                                       case ConnectionState.active:
                                       case ConnectionState.none:
                                       case ConnectionState.waiting:
+                                        return CircularProgressIndicator(
+                                          strokeWidth: 2.0,
+                                        );
                                         break;
                                       case ConnectionState.done:
                                         if (snapshot.hasData) {
@@ -159,8 +125,6 @@ class _ProductPageState extends State<ProductPage> {
                                                         Text(pc.description));
                                               }).toList(),
                                               onChanged: (value) {
-                                                print(
-                                                    "value ============ ${value.description}");
                                                 setState(() {
                                                   _category = value;
                                                 });
@@ -168,7 +132,10 @@ class _ProductPageState extends State<ProductPage> {
                                         }
                                         break;
                                     }
-                                    return Text("");
+                                    return Container(
+                                      child: Text(""),
+                                      height: 30,
+                                    );
                                   },
                                 ),
                               ))),
@@ -217,12 +184,65 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   ],
                 ),
-                FieldFormWithDescription(
-                  controller: _noteController,
-                  width: _width(context, 100),
-                  description: "Observação:",
-                  maxLines: 3,
+                Container(
+                  margin: EdgeInsets.only(bottom: 15),
+                  child: FieldFormWithDescription(
+                    controller: _noteController,
+                    width: _width(context, 100),
+                    description: "Observação:",
+                    maxLines: 3,
+                  ),
                 ),
+                TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        seeProvider = !seeProvider;
+                      });
+                    },
+                    icon: seeProvider
+                        ? Icon(
+                            Icons.visibility,
+                            color: Color(ColorsDefault.primary),
+                          )
+                        : Icon(
+                            Icons.visibility_off,
+                            color: Color(ColorsDefault.primary),
+                          ),
+                    label: Text(
+                      "Fornecedor deste produto",
+                      style: TextStyle(
+                        color: Color(ColorsDefault.primary),
+                      ),
+                    )),
+                Visibility(
+                    visible: seeProvider,
+                    child: Container(
+                      child: TypeAheadField(
+                        textFieldConfiguration: TextFieldConfiguration(
+                            controller: _nameController,
+                            autofocus: false,
+                            decoration:
+                                InputDecoration(border: OutlineInputBorder())),
+                        suggestionsCallback: (pattern) async {
+                          if (pattern.isNotEmpty)
+                            return await _providerRepository.list(
+                                pattern, _key);
+                        },
+                        itemBuilder: (context, suggestion) {
+                          Provider p = suggestion;
+                          return ListTile(
+                            leading: Icon(Icons.person),
+                            title: Text(p.name),
+                            subtitle: Text('test'),
+                          );
+                        },
+                        onSuggestionSelected: (suggestion) {
+                          Provider p = suggestion;
+                          _nameController.text = p.name;
+                          _privider = p;
+                        },
+                      ),
+                    ))
               ],
             ),
           ),
@@ -238,6 +258,7 @@ class _ProductPageState extends State<ProductPage> {
             Container(
                 width: 150,
                 child: Button01(
+                    loader: _loaderCreate,
                     function: () async {
                       String description = _descriptionController.text;
                       String code = _codeController.text;
@@ -267,7 +288,12 @@ class _ProductPageState extends State<ProductPage> {
                           priceSales: sales,
                           priceCost: cost,
                           note: note,
+                          category: _category,
+                          provider: _privider,
                           stocks: [stoke]);
+                      setState(() {
+                        _loaderCreate = true;
+                      });
                       _create(product);
                     },
                     title: "Salvar")),
@@ -294,5 +320,55 @@ class _ProductPageState extends State<ProductPage> {
         ),
       ),
     );
+  }
+
+  var _nameController = TextEditingController();
+  Provider _privider;
+  bool _loaderCreate = false;
+  bool seeProvider = false;
+  var _id;
+  var _descriptionController = TextEditingController();
+  var _codeController = TextEditingController();
+  var _barCodeController = TextEditingController();
+  var _salesController =
+      MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
+  var _costController =
+      MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
+  var _stockCurrentController =
+      MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
+  var _stockMaxController =
+      MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
+  var _stockMinController =
+      MoneyMaskedTextController(decimalSeparator: ",", thousandSeparator: ".");
+  var _noteController = TextEditingController();
+
+  var _repository = ProductRepository();
+  var _prodCatRepository = ProductCategoryRepository();
+  var _providerRepository = ProviderRepository();
+  var _key = GlobalKey<ScaffoldState>();
+
+  List<ProductCategory> _categories;
+  ProductCategory _category;
+
+  double _width(BuildContext context, double porcent) {
+    return (MediaQuery.of(context).size.width * porcent) / 100;
+  }
+
+  _create(Product product) async {
+    if (_loaderCreate) {
+      product = await _repository.create(product, _key);
+      setState(() {
+        _loaderCreate = false;
+      });
+    }
+  }
+
+  Future<List<ProductCategory>> _listCategories() async {
+    if (_categories == null) {
+      _categories = await _prodCatRepository.list();
+      if (_categories.isNotEmpty) _category = _categories.elementAt(0);
+    }
+
+    return Future.value(_categories);
   }
 }
