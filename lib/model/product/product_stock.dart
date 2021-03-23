@@ -1,11 +1,12 @@
 class ProductStock {
   int _id;
   String _description;
-  int _amount;
-  int _max;
-  int _min;
+  double _amount;
+  double _max;
+  double _min;
 
-  ProductStock({int id, String description, int amount, int max, int min}) {
+  ProductStock(
+      {int id, String description, double amount, double max, double min}) {
     this._id = id;
     this._description = description;
     this._amount = amount;
@@ -17,12 +18,12 @@ class ProductStock {
   set id(int id) => _id = id;
   String get description => _description;
   set description(String description) => _description = description;
-  int get amount => _amount;
-  set amount(int amount) => _amount = amount;
-  int get max => _max;
-  set max(int max) => _max = max;
-  int get min => _min;
-  set min(int min) => _min = min;
+  double get amount => _amount;
+  set amount(double amount) => _amount = amount;
+  double get max => _max;
+  set max(double max) => _max = max;
+  double get min => _min;
+  set min(double min) => _min = min;
 
   ProductStock.fromJson(Map<String, dynamic> json) {
     _id = json['id'];

@@ -35,4 +35,13 @@ class ProductRepository {
     }
     return list;
   }
+
+  Future<Product> find(int id) async {
+    try {
+      _response = await DioConfig.getDio().get("/product/$id");
+    } catch (e) {
+      print("e === $e");
+    }
+    return Product.fromJson(_response.data);
+  }
 }

@@ -7,7 +7,7 @@ class Product {
   String _description;
   String _code;
   String _barCode;
-  int _priceSales;
+  double _priceSales;
   double _priceCost;
   String _note;
   ProductCategory _category;
@@ -19,7 +19,7 @@ class Product {
       String description,
       String code,
       String barCode,
-      int priceSales,
+      double priceSales,
       double priceCost,
       String note,
       ProductCategory category,
@@ -45,8 +45,8 @@ class Product {
   set code(String code) => _code = code;
   String get barCode => _barCode;
   set barCode(String barCod) => _barCode = barCode;
-  int get priceSales => _priceSales;
-  set priceSales(int priceSales) => _priceSales = priceSales;
+  double get priceSales => _priceSales;
+  set priceSales(double priceSales) => _priceSales = priceSales;
   double get priceCost => _priceCost;
   set priceCost(double priceCost) => _priceCost = priceCost;
   String get note => _note;
