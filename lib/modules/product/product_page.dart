@@ -257,7 +257,7 @@ class _ProductPageState extends State<ProductPage> {
                               onSuggestionSelected: (suggestion) {
                                 Provider p = suggestion;
                                 _nameController.text = p.name;
-                                _privider = p;
+                                _provider = p;
                               },
                             ),
                           ))
@@ -278,37 +278,7 @@ class _ProductPageState extends State<ProductPage> {
                 child: Button01(
                     loader: _loaderCreate,
                     function: () async {
-                      String description = _descriptionController.text;
-                      String code = _codeController.text;
-                      String barCode = _barCodeController.text;
-                      num sales = MoneyFormat.parse(_salesController.text);
-                      num cost = MoneyFormat.parse(_costController.text);
-                      num stockCurrent =
-                          MoneyFormat.parse(_stockCurrentController.text);
-                      num stockMin =
-                          MoneyFormat.parse(_stockMinController.text);
-                      num stockMax =
-                          MoneyFormat.parse(_stockMaxController.text);
-                      String note = _noteController.text;
-
-                      ProductStock stoke = ProductStock(
-                        amount: stockCurrent,
-                        min: stockMin,
-                        max: stockMax,
-                        description: "",
-                      );
-
-                      Product product = Product(
-                          id: _id,
-                          description: description,
-                          code: code,
-                          barCode: barCode,
-                          priceSales: sales,
-                          priceCost: cost,
-                          note: note,
-                          category: _category,
-                          provider: _privider,
-                          stocks: [stoke]);
+                      Product product = _getDatas();
                       setState(() {
                         _loaderCreate = true;
                       });
@@ -319,7 +289,15 @@ class _ProductPageState extends State<ProductPage> {
               margin: EdgeInsets.only(left: 15, right: 15),
               width: 250,
               child: Button01(
-                function: () {},
+                function: () async {
+                  Product product = _getDatas();
+                  setState(() {
+                    _loaderCreate = true;
+                  });
+                  product = await _create(product);
+
+                  if (product.id != null) _cleanDatas();
+                },
                 title: "Salvar e adicionar outro",
                 color: Color(0xFFf2f2f2),
                 colorText: Color(0xFF1a1a1a),
@@ -328,7 +306,9 @@ class _ProductPageState extends State<ProductPage> {
             Container(
               width: 150,
               child: Button01(
-                function: () {},
+                function: () {
+                  Navigator.pop(context);
+                },
                 title: "Listar",
                 color: Color(0xFFf2f2f2),
                 colorText: Color(0xFF0C66BB),
@@ -340,12 +320,63 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
+  Product _getDatas() {
+    String description = _descriptionController.text;
+    String code = _codeController.text;
+    String barCode = _barCodeController.text;
+    num sales = MoneyFormat.parse(_salesController.text);
+    num cost = MoneyFormat.parse(_costController.text);
+    num stockCurrent = MoneyFormat.parse(_stockCurrentController.text);
+    num stockMin = MoneyFormat.parse(_stockMinController.text);
+    num stockMax = MoneyFormat.parse(_stockMaxController.text);
+    String note = _noteController.text;
+
+    ProductStock stoke = ProductStock(
+      id: _idStock,
+      amount: stockCurrent,
+      min: stockMin,
+      max: stockMax,
+      description: "",
+    );
+
+    Product product = Product(
+        id: _id,
+        description: description,
+        code: code,
+        barCode: barCode,
+        priceSales: sales,
+        priceCost: cost,
+        note: note,
+        category: _category,
+        provider: _provider,
+        stocks: [stoke]);
+    return product;
+  }
+
+  _cleanDatas() {
+    _id = null;
+    _idStock = null;
+    _descriptionController.clear();
+    _codeController.clear();
+    _barCodeController.clear();
+    _category = null;
+    _salesController.text = "0.0";
+    _costController.text = "0.0";
+    _stockCurrentController.text = "0.0";
+    _stockMaxController.text = "0.0";
+    _stockMinController.text = "0.0";
+    _noteController.clear();
+    _provider = null;
+    _nameController.clear();
+  }
+
   var _nameController = TextEditingController();
-  Provider _privider;
+  Provider _provider;
   bool _loaderCreate = false;
   bool _loaderPage = true;
   bool seeProvider = false;
   var _id;
+  var _idStock;
   var _descriptionController = TextEditingController();
   var _codeController = TextEditingController();
   var _barCodeController = TextEditingController();
@@ -373,22 +404,27 @@ class _ProductPageState extends State<ProductPage> {
     return (MediaQuery.of(context).size.width * porcent) / 100;
   }
 
-  _create(Product product) async {
+  Future<Product> _create(Product product) async {
     if (_loaderCreate) {
       product = await _repository.create(product, _key);
       setState(() {
         _loaderCreate = false;
       });
     }
+    return Future.value(product);
   }
 
   Future _find() async {
-    var id = ModalRoute.of(context).settings.arguments;
-    if (id != null) {
-      Product product = await _repository.find(id);
+    _id = ModalRoute.of(context).settings.arguments;
+    if (_id != null) {
+      Product product = await _repository.find(_id);
+      _idStock = product.stocks.elementAt(0).id;
       await _listCategories();
       _loadDatas(product);
     }
+    setState(() {
+      _loaderPage = false;
+    });
   }
 
   Future<List<ProductCategory>> _listCategories() async {
@@ -414,16 +450,13 @@ class _ProductPageState extends State<ProductPage> {
     _stockMinController.text = MoneyFormat.format(min);
     _noteController.text = product.note;
 
-    _privider = product.provider;
-    _nameController.text = product.provider.name;
+    _provider = product.provider;
+    _nameController.text =
+        product.provider != null ? product.provider.name : "";
 
     for (var cat in _categories) {
       if (product.category != null && cat.id == product.category.id)
         _category = cat;
     }
-
-    setState(() {
-      _loaderPage = false;
-    });
   }
 }

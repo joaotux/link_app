@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:link_app/model/product/product.dart';
 import 'package:link_app/modules/config/dio_config.dart';
 import 'package:link_app/modules/config/dio_error_defalt.dart';
+import 'package:link_app/modules/store/pageable.dart';
+import 'package:link_app/utils/colors_default.dart';
+import 'package:link_app/utils/widgets/snackbar_default.dart';
+import 'package:tuple/tuple.dart';
 
 class ProductRepository {
   Response _response;
@@ -15,6 +19,10 @@ class ProductRepository {
 
       if (_response.statusCode == 201) {
         product = Product.fromJson(_response.data);
+        SnackBarDefault.open(
+            scaffoldKey: globalKey,
+            message: "Dados salvos com sucesso",
+            color: Color(ColorsDefault.alertInfo));
       }
     } on DioError catch (e) {
       print("error ============= $e");
@@ -23,17 +31,23 @@ class ProductRepository {
     return product;
   }
 
-  Future<List<Product>> list() async {
+  Future<Tuple2<List<Product>, Pageable>> list(
+      String query, int currentPage) async {
     List<Product> list = [];
+    Pageable pageable;
     try {
-      _response = await DioConfig.getDio().get("/product");
-      for (var p in _response.data) {
+      _response = await DioConfig.getDio()
+          .get("/product/list/$query?page=$currentPage");
+
+      for (var p in _response.data['content']) {
         list.add(Product.fromJson(p));
       }
+
+      pageable = Pageable.fromJson(_response.data);
     } catch (e) {
       print("e === $e");
     }
-    return list;
+    return Future.value(Tuple2(list, pageable));
   }
 
   Future<Product> find(int id) async {

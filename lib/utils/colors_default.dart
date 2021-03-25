@@ -4,4 +4,5 @@ class ColorsDefault {
   static int primaryDark = 0xFFc54b00;
   static int text1 = 0xFFffffff;
   static int text2 = 0xFF3e4042;
+  static int alertInfo = 0xFF66c2ff;
 }

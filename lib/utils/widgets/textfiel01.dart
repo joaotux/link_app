@@ -5,13 +5,15 @@ class TextField01 extends StatefulWidget {
   String hintText;
   bool obscureText;
   EdgeInsetsGeometry margin;
+  Function function;
 
   TextField01(
       {Key key,
       @required this.controller,
       @required this.hintText,
       this.obscureText = false,
-      this.margin})
+      this.margin,
+      this.function})
       : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class _TextField01State extends State<TextField01> {
     return Container(
       margin: widget.margin,
       child: TextField(
+        onChanged: widget.function,
         controller: widget.controller,
         obscureText: !_passwordVisible,
         decoration: InputDecoration(

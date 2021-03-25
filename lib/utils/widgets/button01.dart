@@ -6,13 +6,17 @@ class Button01 extends StatelessWidget {
   final Color colorText;
   final String title;
   final bool loader;
+  final double width;
+  final double height;
   const Button01(
       {Key key,
       @required this.function,
       this.color,
       this.colorText,
       @required this.title,
-      this.loader = false})
+      this.loader = false,
+      this.width,
+      this.height})
       : super(key: key);
 
   @override
@@ -20,12 +24,14 @@ class Button01 extends StatelessWidget {
     Color color =
         this.color == null ? Theme.of(context).primaryColor : this.color;
 
-        Color colorText =
-        this.colorText == null ? Colors.white : this.colorText;
+    Color colorText = this.colorText == null ? Colors.white : this.colorText;
+    double width =
+        this.width == null ? MediaQuery.of(context).size.width : this.width;
+    double height = this.height == null ? 50 : this.height;
 
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 50,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
           color: color,
           border: Border.all(width: 3.0, color: color),
