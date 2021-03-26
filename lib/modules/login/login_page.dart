@@ -5,6 +5,7 @@ import 'package:link_app/modules/login/login_service.dart';
 import 'package:link_app/utils/colors_default.dart';
 import 'package:link_app/utils/widgets/button01.dart';
 import 'package:link_app/utils/widgets/button_link.dart';
+import 'package:link_app/utils/widgets/responsive_layout.dart';
 import 'package:link_app/utils/widgets/tex_form_fiel01.dart';
 import 'package:link_app/utils/widgets/text_form_field_password.dart';
 
@@ -16,54 +17,55 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  var _emailController = TextEditingController();
-  var _passwordController = TextEditingController();
-  var _formKey = GlobalKey<FormState>();
-  var _repository = LoginRepository();
-  var _service = LoginService();
-  bool _load = false;
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  Future _login(String email, String password) async {
-    setState(() {
-      _load = true;
-    });
-    Token token = await _repository.login(email, password, _scaffoldKey);
-    await _service.enterSystem(token, context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(ColorsDefault.primary),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-                height: 150,
-                alignment: Alignment.center,
-                child: Image.asset("assets/icon.png")),
-            Card(
-              margin: EdgeInsets.only(left: 20, right: 20),
-              elevation: 3,
+      body: Row(
+        children: [
+          Expanded(
+              flex: 1,
               child: Container(
-                padding: EdgeInsets.all(15),
-                child: _formLogin(context),
-              ),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color(ColorsDefault.primary),
-        elevation: 0,
-        child: Text(
-          "by UmDesenvolvedor",
-          style: TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
+                margin: EdgeInsets.only(left: 15, right: 15),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: Text(
+                          "Gestão Link",
+                          style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Card(
+                        elevation: 3,
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          child: _formLogin(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
+          ResponsiveLayout.isLargeScreen(context)
+              ? Expanded(
+                  flex: 2,
+                  child: Container(
+                      foregroundDecoration: BoxDecoration(
+                    image: DecorationImage(
+                        alignment: Alignment.centerLeft,
+                        image: NetworkImage("assets/images/image.jpg"),
+                        fit: BoxFit.fitHeight),
+                  )),
+                )
+              : Container(),
+        ],
       ),
     );
   }
@@ -76,13 +78,13 @@ class _LoginState extends State<Login> {
             TextFormField01(
               hintText: " E-mail",
               controller: _emailController,
-              margin: EdgeInsets.only(bottom: 6),
+              margin: EdgeInsets.only(bottom: 15),
               msgErro: "Informe o e-mail",
             ),
             TextFormFieldPassword(
               hintText: " Senha",
               controller: _passwordController,
-              margin: EdgeInsets.only(bottom: 6),
+              margin: EdgeInsets.only(bottom: 15),
               msgErro: "Informe a senha",
             ),
             Button01(
@@ -115,6 +117,22 @@ class _LoginState extends State<Login> {
             )
           ],
         ));
+  }
+
+  var _emailController = TextEditingController();
+  var _passwordController = TextEditingController();
+  var _formKey = GlobalKey<FormState>();
+  var _repository = LoginRepository();
+  var _service = LoginService();
+  bool _load = false;
+  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Future _login(String email, String password) async {
+    setState(() {
+      _load = true;
+    });
+    Token token = await _repository.login(email, password, _scaffoldKey);
+    await _service.enterSystem(token, context);
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:link_app/utils/navigator_to.dart';
 import 'package:link_app/utils/widgets/app_bar_menu.dart';
 import 'package:link_app/utils/widgets/button01.dart';
 import 'package:link_app/utils/widgets/pageable_defaul.dart';
+import 'package:link_app/utils/widgets/responsive_layout.dart';
 import 'package:link_app/utils/widgets/textfiel01.dart';
 import 'package:tuple/tuple.dart';
 
@@ -23,47 +24,59 @@ class _ProductListState extends State<ProductList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarMenu(),
-      body: Container(
-        margin: EdgeInsets.only(top: 15, right: 350, left: 350),
+      body: Padding(
+        padding: EdgeInsets.only(
+            top: 15,
+            bottom: 15,
+            left: ResponsiveLayout.isSmallScreen(context)
+                ? 15
+                : MediaQuery.of(context).size.width * 20 / 100,
+            right: ResponsiveLayout.isSmallScreen(context)
+                ? 15
+                : MediaQuery.of(context).size.width * 20 / 100),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 400,
-                  child: TextField01(
-                    controller: _queryController,
-                    hintText: "Descrição, código produto ou código de barras",
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      child: Icon(
-                        Icons.search,
-                        size: 35,
-                        color: Color(ColorsDefault.primary),
+            Container(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 12,
+                        child: TextField01(
+                          controller: _queryController,
+                          hintText:
+                              "Descrição, código produto ou código de barras",
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.search,
+                          size: 35,
+                          color: Color(ColorsDefault.primary),
+                        ),
+                        onTap: () {
+                          _pageable.setCurrentPage(0);
+                          setState(() {});
+                        },
                       ),
-                      onTap: () {
-                        _pageable.setCurrentPage(0);
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                )
-              ],
+                    )
+                  ],
+                ),
+              ),
             ),
-            Button01(
-              width: 80,
-              height: 30,
-              function: () {
-                NavigatorTo.to(context, "/product/form");
-              },
-              title: "Novo",
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 5),
+              child: Button01(
+                width: 80,
+                height: 30,
+                function: () {
+                  NavigatorTo.to(context, "/product/form");
+                },
+                title: "Novo",
+              ),
             ),
             Expanded(
                 child: Container(

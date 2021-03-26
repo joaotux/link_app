@@ -70,6 +70,7 @@ flutter:
     - assets/icon.png
     - assets/images/flag_br.png
     - assets/images/flag_us.png
+    - assets/images/image.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -24,7 +24,10 @@ class FieldFormWithDescription extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(description),
+        Text(
+          description,
+          overflow: TextOverflow.ellipsis,
+        ),
         Container(
             margin: margin,
             width: width,

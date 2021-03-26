@@ -14,6 +14,7 @@ import 'package:link_app/utils/number_format.dart';
 import 'package:link_app/utils/widgets/app_bar_menu.dart';
 import 'package:link_app/utils/widgets/button01.dart';
 import 'package:link_app/utils/widgets/field_form_with_description.dart';
+import 'package:link_app/utils/widgets/responsive_layout.dart';
 import 'package:link_app/utils/widgets/tex_form_fiel01.dart';
 
 class ProductPage extends StatefulWidget {
@@ -39,57 +40,69 @@ class _ProductPageState extends State<ProductPage> {
       key: _key,
       appBar: AppBarMenu(),
       body: SingleChildScrollView(
-        child: Center(
-          child: _loaderPage
-              ? Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 50),
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  width: _width(context, 50),
-                  margin: EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("Nome do produto:"),
-                          Text(
-                            "*",
-                            style: TextStyle(color: Colors.red),
-                          )
-                        ],
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(bottom: 15),
-                          width: MediaQuery.of(context).size.width,
-                          child: TextFormField01(
-                              controller: _descriptionController,
-                              hintText: "")),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FieldFormWithDescription(
+        child: _loaderPage
+            ? Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 50),
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Padding(
+                padding: EdgeInsets.only(
+                    top: 15,
+                    bottom: 15,
+                    left: ResponsiveLayout.isSmallScreen(context)
+                        ? 15
+                        : MediaQuery.of(context).size.width * 20 / 100,
+                    right: ResponsiveLayout.isSmallScreen(context)
+                        ? 15
+                        : MediaQuery.of(context).size.width * 20 / 100),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Nome do produto:"),
+                        Text(
+                          "*",
+                          style: TextStyle(color: Colors.red),
+                        )
+                      ],
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(bottom: 15),
+                        width: MediaQuery.of(context).size.width,
+                        child: TextFormField01(
+                            controller: _descriptionController, hintText: "")),
+                    Wrap(
+                      children: [
+                        Container(
+                          width: 150,
+                          child: FieldFormWithDescription(
                             controller: _codeController,
-                            width: _width(context, 8),
                             description: "Código do produto:",
                             margin: EdgeInsets.only(right: 15, bottom: 15),
                           ),
-                          FieldFormWithDescription(
+                        ),
+                        Container(
+                          width: 400,
+                          child: FieldFormWithDescription(
                             controller: _barCodeController,
-                            width: _width(context, 20),
                             description: "Código de barra (EAN):",
                             margin: EdgeInsets.only(right: 15, bottom: 15),
                           ),
-                          Column(
+                        ),
+                        Container(
+                          width: 200,
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Categoria do produto"),
+                              Text(
+                                "Categoria do produto",
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               Container(
-                                width: 180,
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: ButtonTheme(
                                     alignedDropdown: true,
@@ -159,162 +172,191 @@ class _ProductPageState extends State<ProductPage> {
                                     ))),
                               ),
                             ],
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FieldFormWithDescription(
-                            controller: _salesController,
-                            width: _width(context, 8),
-                            description: "Valor venda:",
-                            margin: EdgeInsets.only(right: 15, bottom: 15),
                           ),
-                          FieldFormWithDescription(
-                            controller: _costController,
-                            width: _width(context, 8),
-                            description: "Custo médio:",
-                            margin: EdgeInsets.only(right: 15, bottom: 15),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FieldFormWithDescription(
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                            flex: 2,
+                            child: FieldFormWithDescription(
+                              controller: _salesController,
+                              description: "Valor venda:",
+                              margin: EdgeInsets.only(right: 15, bottom: 15),
+                            )),
+                        Expanded(
+                            flex: 2,
+                            child: FieldFormWithDescription(
+                                controller: _costController,
+                                description: "Custo médio:",
+                                margin: EdgeInsets.only(bottom: 15))),
+                        if (ResponsiveLayout.isLargeScreen(context))
+                          Expanded(
+                              flex: 6,
+                              child: Container(
+                                margin: EdgeInsets.only(left: 15),
+                              ))
+                      ],
+                    ),
+                    Wrap(
+                      children: [
+                        Container(
+                          width: 150,
+                          child: FieldFormWithDescription(
                             controller: _stockCurrentController,
-                            width: _width(context, 8),
                             description: "Estoque disponível:",
-                            margin: EdgeInsets.only(right: 15, bottom: 15),
+                            margin: EdgeInsets.only(right: 15),
                           ),
-                          FieldFormWithDescription(
-                            controller: _stockMinController,
-                            width: _width(context, 8),
-                            description: "Estoque mínimo:",
-                            margin: EdgeInsets.only(right: 15, bottom: 15),
-                          ),
-                          FieldFormWithDescription(
-                            controller: _stockMaxController,
-                            width: _width(context, 8),
-                            description: "Estoque máximo:",
-                            margin: EdgeInsets.only(right: 15, bottom: 15),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 15),
-                        child: FieldFormWithDescription(
-                          controller: _noteController,
-                          width: _width(context, 100),
-                          description: "Observação:",
-                          maxLines: 3,
                         ),
+                        Container(
+                          width: 150,
+                          child: FieldFormWithDescription(
+                            controller: _stockMinController,
+                            description: "Estoque mínimo:",
+                            margin: EdgeInsets.only(right: 15),
+                          ),
+                        ),
+                        Container(
+                          width: 150,
+                          margin: EdgeInsets.only(
+                              top: ResponsiveLayout.isSmallScreen(context)
+                                  ? 15
+                                  : 0),
+                          child: FieldFormWithDescription(
+                            controller: _stockMaxController,
+                            description: "Estoque máximo:",
+                            margin: EdgeInsets.only(
+                              right: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 15, bottom: 15),
+                      child: FieldFormWithDescription(
+                        controller: _noteController,
+                        width: _width(context, 100),
+                        description: "Observação:",
+                        maxLines: 3,
                       ),
-                      TextButton.icon(
-                          onPressed: () {
-                            setState(() {
-                              seeProvider = !seeProvider;
-                            });
-                          },
-                          icon: seeProvider
-                              ? Icon(
-                                  Icons.visibility,
-                                  color: Color(ColorsDefault.primary),
-                                )
-                              : Icon(
-                                  Icons.visibility_off,
-                                  color: Color(ColorsDefault.primary),
-                                ),
-                          label: Text(
-                            "Fornecedor deste produto",
-                            style: TextStyle(
-                              color: Color(ColorsDefault.primary),
-                            ),
-                          )),
-                      Visibility(
-                          visible: seeProvider,
-                          child: Container(
-                            child: TypeAheadField(
-                              textFieldConfiguration: TextFieldConfiguration(
-                                  controller: _nameController,
-                                  autofocus: false,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder())),
-                              suggestionsCallback: (pattern) async {
-                                if (pattern.isNotEmpty)
-                                  return await _providerRepository.list(
-                                      pattern, _key);
-                              },
-                              itemBuilder: (context, suggestion) {
-                                Provider p = suggestion;
-                                return ListTile(
-                                  leading: Icon(Icons.person),
-                                  title: Text(p.name),
-                                  subtitle: Text('test'),
-                                );
-                              },
-                              onSuggestionSelected: (suggestion) {
-                                Provider p = suggestion;
-                                _nameController.text = p.name;
-                                _provider = p;
-                              },
-                            ),
-                          ))
-                    ],
-                  ),
+                    ),
+                    TextButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            seeProvider = !seeProvider;
+                          });
+                        },
+                        icon: seeProvider
+                            ? Icon(
+                                Icons.visibility,
+                                color: Color(ColorsDefault.primary),
+                              )
+                            : Icon(
+                                Icons.visibility_off,
+                                color: Color(ColorsDefault.primary),
+                              ),
+                        label: Text(
+                          "Fornecedor deste produto",
+                          style: TextStyle(
+                            color: Color(ColorsDefault.primary),
+                          ),
+                        )),
+                    Visibility(
+                        visible: seeProvider,
+                        child: Container(
+                          child: TypeAheadField(
+                            textFieldConfiguration: TextFieldConfiguration(
+                                controller: _nameController,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder())),
+                            suggestionsCallback: (pattern) async {
+                              if (pattern.isNotEmpty)
+                                return await _providerRepository.list(
+                                    pattern, _key);
+                            },
+                            itemBuilder: (context, suggestion) {
+                              Provider p = suggestion;
+                              return ListTile(
+                                leading: Icon(Icons.person),
+                                title: Text(p.name),
+                                subtitle: Text('test'),
+                              );
+                            },
+                            onSuggestionSelected: (suggestion) {
+                              Provider p = suggestion;
+                              _nameController.text = p.name;
+                              _provider = p;
+                            },
+                          ),
+                        ))
+                  ],
                 ),
-        ),
+              ),
       ),
       bottomNavigationBar: Container(
         alignment: Alignment.center,
         color: Color(0xFFd9d9d9),
         height: 80,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                width: 150,
-                child: Button01(
-                    loader: _loaderCreate,
-                    function: () async {
-                      Product product = _getDatas();
-                      setState(() {
-                        _loaderCreate = true;
-                      });
-                      _create(product);
-                    },
-                    title: "Salvar")),
-            Container(
-              margin: EdgeInsets.only(left: 15, right: 15),
-              width: 250,
-              child: Button01(
-                function: () async {
-                  Product product = _getDatas();
-                  setState(() {
-                    _loaderCreate = true;
-                  });
-                  product = await _create(product);
+        child: Padding(
+          padding: EdgeInsets.only(
+              left: ResponsiveLayout.isSmallScreen(context)
+                  ? 15
+                  : MediaQuery.of(context).size.width * 20 / 100,
+              right: ResponsiveLayout.isSmallScreen(context)
+                  ? 15
+                  : MediaQuery.of(context).size.width * 20 / 100),
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 15),
+                    child: Button01(
+                        loader: _loaderCreate,
+                        function: () async {
+                          Product product = _getDatas();
+                          setState(() {
+                            _loaderCreate = true;
+                          });
+                          _create(product);
+                        },
+                        title: "Salvar"),
+                  )),
+              Expanded(
+                  flex: 2,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 15),
+                    child: Button01(
+                      function: () async {
+                        Product product = _getDatas();
+                        setState(() {
+                          _loaderCreate = true;
+                        });
+                        product = await _create(product);
 
-                  if (product.id != null) _cleanDatas();
-                },
-                title: "Salvar e adicionar outro",
-                color: Color(0xFFf2f2f2),
-                colorText: Color(0xFF1a1a1a),
-              ),
-            ),
-            Container(
-              width: 150,
-              child: Button01(
-                function: () {
-                  Navigator.pop(context);
-                },
-                title: "Listar",
-                color: Color(0xFFf2f2f2),
-                colorText: Color(0xFF0C66BB),
-              ),
-            ),
-          ],
+                        if (product.id != null) _cleanDatas();
+                      },
+                      title: "Salvar e adicionar outro",
+                      color: Color(0xFFf2f2f2),
+                      colorText: Color(0xFF1a1a1a),
+                    ),
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Button01(
+                    function: () {
+                      Navigator.pop(context);
+                    },
+                    title: "Listar",
+                    color: Color(0xFFf2f2f2),
+                    colorText: Color(0xFF0C66BB),
+                  )),
+            ],
+          ),
         ),
       ),
     );
