@@ -3,7 +3,7 @@ import 'package:link_app/utils/navigator_to.dart';
 import 'package:link_app/utils/widgets/responsive_layout.dart';
 
 class AppBarMenu extends StatefulWidget with PreferredSizeWidget {
-  AppBarMenu({Key key}) : super(key: key);
+  AppBarMenu({Key? key}) : super(key: key);
 
   @override
   _AppBarMenuState createState() => _AppBarMenuState();
@@ -92,7 +92,7 @@ class _AppBarMenuState extends State<AppBarMenu> {
                     ),
                   ],
                   onChanged: (value) {
-                    NavigatorTo.to(context, value);
+                    NavigatorTo.to(context, value.toString());
                   })),
         ),
       ],

@@ -13,7 +13,7 @@ import 'package:link_app/utils/widgets/textfiel01.dart';
 import 'package:tuple/tuple.dart';
 
 class ProductList extends StatefulWidget {
-  ProductList({Key key}) : super(key: key);
+  ProductList({Key? key}) : super(key: key);
 
   @override
   _ProductListState createState() => _ProductListState();
@@ -96,9 +96,9 @@ class _ProductListState extends State<ProductList> {
                               if (snapshot.hasData) {
                                 return Container(
                                   child: ListView.builder(
-                                      itemCount: snapshot.data.length,
+                                      itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        Product product = snapshot.data[index];
+                                        Product product = snapshot.data![index];
                                         return ListTile(
                                           title: Text("${product.description}"),
                                           onTap: () async {

@@ -3,7 +3,7 @@ import 'package:link_app/model/product/product_category.dart';
 import 'package:link_app/modules/config/dio_config.dart';
 
 class ProductCategoryRepository {
-  Response _response;
+  late Response _response;
 
   Future<List<ProductCategory>> list() async {
     List<ProductCategory> list = [];

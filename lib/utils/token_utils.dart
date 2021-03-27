@@ -1,3 +1,3 @@
 class TokenUtils {
-  String token;
+  String? token;
 }

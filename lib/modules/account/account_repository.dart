@@ -5,7 +5,7 @@ import 'package:link_app/modules/config/dio_config.dart';
 import 'package:link_app/modules/config/dio_error_defalt.dart';
 
 class AccountRepository {
-  Response _response;
+  late Response _response;
 
   Future<Company> create(
       Company company, GlobalKey<ScaffoldState> globalKey) async {

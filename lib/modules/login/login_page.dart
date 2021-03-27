@@ -10,7 +10,7 @@ import 'package:link_app/utils/widgets/tex_form_fiel01.dart';
 import 'package:link_app/utils/widgets/text_form_field_password.dart';
 
 class Login extends StatefulWidget {
-  Login({Key key}) : super(key: key);
+  Login({Key? key}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -24,11 +24,12 @@ class _LoginState extends State<Login> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(ColorsDefault.primary),
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
               flex: 1,
               child: Container(
-                margin: EdgeInsets.only(left: 15, right: 15),
+                margin: EdgeInsets.only(top: 150, left: 15, right: 15),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -89,7 +90,7 @@ class _LoginState extends State<Login> {
             ),
             Button01(
               function: () async {
-                if (_formKey.currentState.validate()) {
+                if (_formKey.currentState!.validate()) {
                   String email = _emailController.text;
                   String password = _passwordController.text;
 
@@ -125,7 +126,7 @@ class _LoginState extends State<Login> {
   var _repository = LoginRepository();
   var _service = LoginService();
   bool _load = false;
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future _login(String email, String password) async {
     setState(() {
@@ -138,7 +139,7 @@ class _LoginState extends State<Login> {
   @override
   void dispose() {
     super.dispose();
-    _emailController = null;
-    _passwordController = null;
+    _emailController.clear();
+    _passwordController.clear();
   }
 }

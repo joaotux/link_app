@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:link_app/utils/widgets/tex_form_fiel01.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class FieldFormWithDescription extends StatelessWidget {
   final String description;
   final TextEditingController controller;
-  final MaskTextInputFormatter format;
-  final double width;
+  final List<TextInputFormatter>? format;
+  final double? width;
   final int maxLines;
-  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry? margin;
   const FieldFormWithDescription({
-    Key key,
-    this.description,
-    this.controller,
+    Key? key,
+    required this.description,
+    required this.controller,
     this.format,
     this.width,
     this.maxLines = 1,

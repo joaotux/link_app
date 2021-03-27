@@ -7,12 +7,12 @@ class PageableController = _PageableControllerBase with _$PageableController;
 
 abstract class _PageableControllerBase with Store {
   @observable
-  Pageable _pageable;
+  Pageable? _pageable;
 
   @observable
   int _currentPage = 0;
 
-  Pageable get pageable => _pageable;
+  Pageable? get pageable => _pageable;
 
   @action
   setPageable(Pageable value) => _pageable = value;

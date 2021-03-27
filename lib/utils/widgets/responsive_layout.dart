@@ -6,10 +6,10 @@ class ResponsiveLayout extends StatelessWidget {
   final Widget smallScreen;
 
   const ResponsiveLayout(
-      {Key key,
-      @required this.largeScreen,
-      this.mediumScreen,
-      this.smallScreen})
+      {Key? key,
+      required this.largeScreen,
+      required this.mediumScreen,
+      required this.smallScreen})
       : super(key: key);
 
   static bool isSmallScreen(BuildContext context) {

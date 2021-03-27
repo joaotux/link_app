@@ -5,7 +5,7 @@ import 'package:link_app/utils/widgets/snackbar_default.dart';
 import 'package:link_app/utils/widgets/textfiel01.dart';
 
 class ForgoutPasswordPage extends StatefulWidget {
-  ForgoutPasswordPage({Key key}) : super(key: key);
+  ForgoutPasswordPage({Key? key}) : super(key: key);
 
   @override
   _ForgoutPasswordPageState createState() => _ForgoutPasswordPageState();

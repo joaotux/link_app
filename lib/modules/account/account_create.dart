@@ -8,12 +8,13 @@ import 'package:link_app/modules/login/login_service.dart';
 import 'package:link_app/utils/colors_default.dart';
 import 'package:link_app/utils/string_utils.dart';
 import 'package:link_app/utils/widgets/button01.dart';
+import 'package:link_app/utils/widgets/responsive_layout.dart';
 import 'package:link_app/utils/widgets/tex_form_fiel01.dart';
 import 'package:link_app/utils/widgets/text_form_field_password.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class AccountCreate extends StatefulWidget {
-  AccountCreate({Key key}) : super(key: key);
+  AccountCreate({Key? key}) : super(key: key);
 
   @override
   _AccountCreateState createState() => _AccountCreateState();
@@ -76,7 +77,10 @@ class _AccountCreateState extends State<AccountCreate> {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            width: (MediaQuery.of(context).size.width * 20) / 100,
+            margin: EdgeInsets.all(15),
+            width: ResponsiveLayout.isLargeScreen(context)
+                ? ((MediaQuery.of(context).size.width * 25) / 100)
+                : MediaQuery.of(context).size.width - 20,
             padding: EdgeInsets.all(15),
             alignment: Alignment.center,
             child: Form(
@@ -97,7 +101,7 @@ class _AccountCreateState extends State<AccountCreate> {
                       controller: _email01Controller,
                       margin: EdgeInsets.only(top: 6, bottom: 6),
                       validation: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Campo obrigatório";
                         } else if (!StringUtils.isEmail(value)) {
                           return "Formato de e-mail inválido";
@@ -110,7 +114,7 @@ class _AccountCreateState extends State<AccountCreate> {
                         controller: _email02Controller,
                         margin: EdgeInsets.only(bottom: 6),
                         validation: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return "Campo obrigatório";
                           } else if (value != _email01Controller.text) {
                             return "E-mails não são iguais";
@@ -126,7 +130,7 @@ class _AccountCreateState extends State<AccountCreate> {
                         controller: _password02Controller,
                         margin: EdgeInsets.only(bottom: 6),
                         validation: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return "Campo obrigatório";
                           } else if (value != _password01Controller.text) {
                             return "Senhas não são iguais";
@@ -135,10 +139,10 @@ class _AccountCreateState extends State<AccountCreate> {
                         }),
                     TextFormField01(
                         hintText: " Telefone",
-                        format: _phoneController,
+                        format: [_phoneController],
                         margin: EdgeInsets.only(bottom: 6),
                         validation: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return "Campo obrigatório";
                           }
                           return null;
@@ -159,7 +163,7 @@ class _AccountCreateState extends State<AccountCreate> {
                                   BorderRadius.all(Radius.circular(5.0)),
                             ),
                           ),
-                          child: DropdownButton(
+                          child: DropdownButton<dynamic>(
                               isExpanded: true,
                               dropdownColor: Color(0xFFFFE1CD),
                               elevation: 0,
@@ -199,7 +203,7 @@ class _AccountCreateState extends State<AccountCreate> {
                                   BorderRadius.all(Radius.circular(5.0)),
                             ),
                           ),
-                          child: DropdownButton(
+                          child: DropdownButton<dynamic>(
                               isExpanded: true,
                               dropdownColor: Color(0xFFFFE1CD),
                               elevation: 0,
@@ -230,7 +234,7 @@ class _AccountCreateState extends State<AccountCreate> {
                     Button01(
                       title: "Testar por 7 dias grátis",
                       function: () async {
-                        if (_key.currentState.validate()) {
+                        if (_key.currentState!.validate()) {
                           String email = _email01Controller.text;
                           String password = _password01Controller.text;
                           String phone = _phoneController.getMaskedText();
@@ -264,9 +268,9 @@ class _AccountCreateState extends State<AccountCreate> {
   @override
   void dispose() {
     super.dispose();
-    _email01Controller = null;
-    _email02Controller = null;
-    _password01Controller = null;
-    _password02Controller = null;
+    _email01Controller.clear();
+    _email02Controller.clear();
+    _password01Controller.clear();
+    _password02Controller.clear();
   }
 }

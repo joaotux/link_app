@@ -3,28 +3,28 @@ import 'package:link_app/model/product/product_stock.dart';
 import 'package:link_app/model/provider.dart';
 
 class Product {
-  int _id;
-  String _description;
-  String _code;
-  String _barCode;
-  double _priceSales;
-  double _priceCost;
-  String _note;
-  ProductCategory _category;
-  Provider _provider;
-  List<ProductStock> _stocks;
+  int? _id;
+  late String _description;
+  late String _code;
+  late String _barCode;
+  late double _priceSales;
+  late double _priceCost;
+  late String _note;
+  ProductCategory? _category;
+  Provider? _provider;
+  List<ProductStock>? _stocks;
 
   Product(
-      {int id,
-      String description,
-      String code,
-      String barCode,
-      double priceSales,
-      double priceCost,
-      String note,
-      ProductCategory category,
-      Provider provider,
-      List<ProductStock> stocks}) {
+      {int? id,
+      String description = "",
+      String code = "",
+      String barCode = "",
+      double priceSales = 0.0,
+      double priceCost = 0.0,
+      String note = "",
+      ProductCategory? category,
+      Provider? provider,
+      List<ProductStock>? stocks}) {
     this._id = id;
     this._description = description;
     this._code = code;
@@ -37,8 +37,8 @@ class Product {
     this._stocks = stocks;
   }
 
-  int get id => _id;
-  set id(int id) => _id = id;
+  int? get id => _id;
+  set id(int? id) => _id = id;
   String get description => _description;
   set description(String description) => _description = description;
   String get code => _code;
@@ -51,12 +51,12 @@ class Product {
   set priceCost(double priceCost) => _priceCost = priceCost;
   String get note => _note;
   set note(String note) => _note = note;
-  ProductCategory get category => _category;
-  set category(ProductCategory category) => _category = category;
-  Provider get provider => _provider;
-  set provider(Provider provider) => _provider = provider;
-  List<ProductStock> get stocks => _stocks;
-  set stocks(List<ProductStock> stocks) => _stocks = stocks;
+  ProductCategory? get category => _category;
+  set category(ProductCategory? category) => _category = category;
+  Provider? get provider => _provider;
+  set provider(Provider? provider) => _provider = provider;
+  List<ProductStock>? get stocks => _stocks;
+  set stocks(List<ProductStock>? stocks) => _stocks = stocks;
 
   Product.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -75,7 +75,7 @@ class Product {
     if (json['stocks'] != null) {
       _stocks = [];
       json['stocks'].forEach((v) {
-        _stocks.add(ProductStock.fromJson(v));
+        _stocks!.add(ProductStock.fromJson(v));
       });
     }
   }
@@ -90,13 +90,13 @@ class Product {
     data['priceCost'] = this._priceCost;
     data['note'] = this._note;
     if (this._category != null) {
-      data['category'] = this._category.toJson();
+      data['category'] = this._category!.toJson();
     }
     if (this._provider != null) {
-      data['provider'] = this._provider.toJson();
+      data['provider'] = this._provider!.toJson();
     }
     if (this._stocks != null) {
-      data['stocks'] = this._stocks.map((v) => v.toJson()).toList();
+      data['stocks'] = this._stocks!.map((v) => v.toJson()).toList();
     }
     return data;
   }

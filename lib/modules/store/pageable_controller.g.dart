@@ -12,13 +12,13 @@ mixin _$PageableController on _PageableControllerBase, Store {
   final _$_pageableAtom = Atom(name: '_PageableControllerBase._pageable');
 
   @override
-  Pageable get _pageable {
+  Pageable? get _pageable {
     _$_pageableAtom.reportRead();
     return super._pageable;
   }
 
   @override
-  set _pageable(Pageable value) {
+  set _pageable(Pageable? value) {
     _$_pageableAtom.reportWrite(value, super._pageable, () {
       super._pageable = value;
     });

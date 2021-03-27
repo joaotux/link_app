@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class TextFormFieldPassword extends StatefulWidget {
   TextEditingController controller;
   String hintText;
-  EdgeInsetsGeometry margin;
+  EdgeInsetsGeometry? margin;
   String msgErro;
-  Function(String value) validation;
+  FormFieldValidator<String>? validation;
 
   TextFormFieldPassword(
-      {Key key,
-      @required this.controller,
-      @required this.hintText,
+      {Key? key,
+      required this.controller,
+      required this.hintText,
       this.margin,
       this.msgErro = "Campo obrigatório",
       this.validation})
@@ -20,13 +20,12 @@ class TextFormFieldPassword extends StatefulWidget {
   _TextFormFieldPasswordState createState() => _TextFormFieldPasswordState();
 }
 
-bool _passwordVisible;
+bool _passwordVisible = false;
 
 class _TextFormFieldPasswordState extends State<TextFormFieldPassword> {
   @override
   void initState() {
     super.initState();
-    _passwordVisible = false;
     widget.margin = widget.margin == null ? EdgeInsets.all(0) : widget.margin;
   }
 
@@ -36,7 +35,7 @@ class _TextFormFieldPasswordState extends State<TextFormFieldPassword> {
       margin: widget.margin,
       child: TextFormField(
         validator: widget.validation == null
-            ? (value) => value.isEmpty ? widget.msgErro : null
+            ? (value) => value!.isEmpty ? widget.msgErro : null
             : widget.validation,
         controller: widget.controller,
         obscureText: !_passwordVisible,

@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedUtils {
-  static Future<SharedPreferences> _shared;
+  static late Future<SharedPreferences> _shared;
 
   SharedUtils() {
     _shared = SharedPreferences.getInstance();

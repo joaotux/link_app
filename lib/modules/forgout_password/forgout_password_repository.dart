@@ -4,11 +4,10 @@ import 'package:link_app/modules/config/dio_config.dart';
 import 'package:link_app/modules/config/dio_error_defalt.dart';
 
 class ForgoutPasswordRepository {
-  Dio _dio;
-  Response _response;
+  Dio _dio = DioConfig.getDio();
+  late Response _response;
 
   ForgoutPasswordRepository() {
-    _dio = DioConfig.getDio();
     _response = Response();
   }
 

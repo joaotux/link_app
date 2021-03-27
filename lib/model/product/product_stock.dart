@@ -1,12 +1,16 @@
 class ProductStock {
-  int _id;
-  String _description;
-  double _amount;
-  double _max;
-  double _min;
+  int? _id;
+  late String _description;
+  late double _amount;
+  late double _max;
+  late double _min;
 
   ProductStock(
-      {int id, String description, double amount, double max, double min}) {
+      {int? id,
+      String description = "",
+      double amount = 0.0,
+      double max = 0.0,
+      double min = 0.0}) {
     this._id = id;
     this._description = description;
     this._amount = amount;
@@ -14,8 +18,8 @@ class ProductStock {
     this._min = min;
   }
 
-  int get id => _id;
-  set id(int id) => _id = id;
+  int? get id => _id;
+  set id(int? id) => _id = id;
   String get description => _description;
   set description(String description) => _description = description;
   double get amount => _amount;

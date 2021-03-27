@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TextFormField01 extends StatefulWidget {
-  TextEditingController controller;
-  TextInputFormatter format;
+  TextEditingController? controller;
+  List<TextInputFormatter>? format;
   String hintText;
   bool obscureText;
   int maxLines;
-  EdgeInsetsGeometry margin;
+  EdgeInsetsGeometry? margin;
   String msgErro;
-  Function(String value) validation;
+  FormFieldValidator<String>? validation;
 
   TextFormField01(
-      {Key key,
+      {Key? key,
       this.controller,
-      @required this.hintText,
+      required this.hintText,
       this.format,
       this.obscureText = false,
       this.maxLines = 1,
@@ -27,7 +27,7 @@ class TextFormField01 extends StatefulWidget {
   _TextFormField01State createState() => _TextFormField01State();
 }
 
-bool _passwordVisible;
+late bool _passwordVisible;
 
 class _TextFormField01State extends State<TextFormField01> {
   @override
@@ -43,11 +43,11 @@ class _TextFormField01State extends State<TextFormField01> {
       margin: widget.margin,
       child: TextFormField(
         validator: widget.validation == null
-            ? (value) => value.isEmpty ? widget.msgErro : null
+            ? (value) => value!.isEmpty ? widget.msgErro : null
             : widget.validation,
         controller: widget.controller,
         maxLines: widget.maxLines,
-        inputFormatters: widget.format != null ? [widget.format] : [],
+        inputFormatters: widget.format != null ? widget.format : [],
         obscureText: !_passwordVisible,
         decoration: InputDecoration(
           border:

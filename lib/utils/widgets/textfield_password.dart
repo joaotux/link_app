@@ -3,26 +3,22 @@ import 'package:flutter/material.dart';
 class TextFieldPassword extends StatefulWidget {
   TextEditingController controller;
   String hintText;
-  EdgeInsetsGeometry margin;
+  EdgeInsetsGeometry? margin;
 
   TextFieldPassword(
-      {Key key,
-      @required this.controller,
-      @required this.hintText,
-      this.margin})
+      {Key? key, required this.controller, required this.hintText, this.margin})
       : super(key: key);
 
   @override
   _TextFieldPasswordState createState() => _TextFieldPasswordState();
 }
 
-bool _passwordVisible;
+bool _passwordVisible = false;
 
 class _TextFieldPasswordState extends State<TextFieldPassword> {
   @override
   void initState() {
     super.initState();
-    _passwordVisible = false;
     widget.margin = widget.margin == null ? EdgeInsets.all(0) : widget.margin;
   }
 

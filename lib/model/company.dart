@@ -1,24 +1,24 @@
 import 'package:link_app/model/user.dart';
 
 class Company {
-  String _id;
-  String _name;
-  String _identificationNumber;
-  String _identificationType;
-  String _phone;
-  String _info1;
-  String _info2;
-  List<User> _users;
+  String? _id;
+  late String _name;
+  late String _identificationNumber;
+  late String _identificationType;
+  late String _phone;
+  late String _info1;
+  late String _info2;
+  late List<User> _users;
 
   Company(
-      {String id,
-      String name,
-      String identificationNumber,
-      String identificationType,
-      String phone,
-      String info1,
-      String info2,
-      List<User> users}) {
+      {String? id,
+      String name = "",
+      String identificationNumber = "",
+      String identificationType = "",
+      String phone = "",
+      String info1 = "",
+      String info2 = "",
+      required List<User> users}) {
     this._id = id;
     this._name = name;
     this._identificationNumber = identificationNumber;
@@ -29,8 +29,8 @@ class Company {
     this._users = users;
   }
 
-  String get id => _id;
-  set id(String id) => _id = id;
+  String? get id => _id;
+  set id(String? id) => _id = id;
   String get name => _name;
   set name(String name) => _name = name;
   String get identificationNumber => _identificationNumber;

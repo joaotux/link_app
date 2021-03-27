@@ -7,17 +7,16 @@ import 'package:link_app/modules/config/dio_error_defalt.dart';
 import 'package:link_app/utils/widgets/snackbar_default.dart';
 
 class LoginRepository {
-  Dio _dio;
-  Response _response;
+  Dio _dio = DioConfig.getDio();
+  late Response _response;
 
   LoginRepository() {
-    _dio = DioConfig.getDio();
     _response = Response();
   }
 
   Future<Token> login(String email, String password,
       GlobalKey<ScaffoldState> scaffoldKey) async {
-    Token token;
+    Token token = Token();
 
     User user = User(email: email, password: password);
 

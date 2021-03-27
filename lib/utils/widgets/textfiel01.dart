@@ -4,13 +4,13 @@ class TextField01 extends StatefulWidget {
   TextEditingController controller;
   String hintText;
   bool obscureText;
-  EdgeInsetsGeometry margin;
-  Function function;
+  EdgeInsetsGeometry? margin;
+  ValueChanged<String>? function;
 
   TextField01(
-      {Key key,
-      @required this.controller,
-      @required this.hintText,
+      {Key? key,
+      required this.controller,
+      required this.hintText,
       this.obscureText = false,
       this.margin,
       this.function})
@@ -20,7 +20,7 @@ class TextField01 extends StatefulWidget {
   _TextField01State createState() => _TextField01State();
 }
 
-bool _passwordVisible;
+late bool _passwordVisible;
 
 class _TextField01State extends State<TextField01> {
   @override

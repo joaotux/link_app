@@ -4,11 +4,11 @@ import 'package:link_app/utils/widgets/snackbar_default.dart';
 
 class DioErrorDefault {
   static show(
-      {DioError error, GlobalKey<ScaffoldState> scaffoldKey, Color color}) {
+      {DioError? error, GlobalKey<ScaffoldState>? scaffoldKey, Color? color}) {
     String messageErro = "";
     color = color == null ? Color(0xFF999999) : color;
 
-    if (error.message.contains("Connection refused")) {
+    if (error!.message.contains("Connection refused")) {
       messageErro = "Verifique o seu acesso a internet";
     } else if (error.response != null) {
       List<dynamic> errors = error.response.data['errors'];
@@ -16,7 +16,7 @@ class DioErrorDefault {
     }
 
     SnackBarDefault.open(
-        scaffoldKey: scaffoldKey,
+        scaffoldKey: scaffoldKey!,
         message: messageErro,
         color: color,
         colorText: Colors.white);

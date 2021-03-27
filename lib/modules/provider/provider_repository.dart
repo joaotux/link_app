@@ -5,7 +5,7 @@ import 'package:link_app/modules/config/dio_config.dart';
 import 'package:link_app/modules/config/dio_error_defalt.dart';
 
 class ProviderRepository {
-  Response _response;
+  Response? _response;
 
   Future<List<Provider>> list(
       String name, GlobalKey<ScaffoldState> globalKey) async {
@@ -15,8 +15,8 @@ class ProviderRepository {
         "/provider/$name",
       );
 
-      if (_response.statusCode == 200) {
-        for (var p in _response.data) {
+      if (_response!.statusCode == 200) {
+        for (var p in _response!.data) {
           list.add(Provider.fromJson(p));
         }
       }

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class Button01 extends StatelessWidget {
-  final Function function;
-  final Color color;
-  final Color colorText;
+  final VoidCallback? function;
+  final Color? color;
+  final Color? colorText;
   final String title;
   final bool loader;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   const Button01(
-      {Key key,
-      @required this.function,
+      {Key? key,
+      required this.function,
       this.color,
       this.colorText,
-      @required this.title,
+      required this.title,
       this.loader = false,
       this.width,
       this.height})
@@ -22,12 +22,12 @@ class Button01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color =
-        this.color == null ? Theme.of(context).primaryColor : this.color;
+        (this.color == null ? Theme.of(context).primaryColor : this.color)!;
 
-    Color colorText = this.colorText == null ? Colors.white : this.colorText;
+    Color colorText = this.colorText == null ? Colors.white : this.colorText!;
     double width =
-        this.width == null ? MediaQuery.of(context).size.width : this.width;
-    double height = this.height == null ? 50 : this.height;
+        this.width == null ? MediaQuery.of(context).size.width : this.width!;
+    double height = this.height == null ? 50 : this.height!;
 
     return Container(
       width: width,

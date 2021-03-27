@@ -9,7 +9,7 @@ import 'package:link_app/utils/widgets/snackbar_default.dart';
 import 'package:tuple/tuple.dart';
 
 class ProductRepository {
-  Response _response;
+  late Response _response;
 
   Future<Product> create(
       Product product, GlobalKey<ScaffoldState> globalKey) async {
@@ -19,6 +19,7 @@ class ProductRepository {
 
       if (_response.statusCode == 201) {
         product = Product.fromJson(_response.data);
+        globalKey.currentState!.removeCurrentSnackBar();
         SnackBarDefault.open(
             scaffoldKey: globalKey,
             message: "Dados salvos com sucesso",
@@ -34,7 +35,7 @@ class ProductRepository {
   Future<Tuple2<List<Product>, Pageable>> list(
       String query, int currentPage) async {
     List<Product> list = [];
-    Pageable pageable;
+    Pageable? pageable;
     try {
       _response = await DioConfig.getDio()
           .get("/product/list/$query?page=$currentPage");
@@ -47,7 +48,7 @@ class ProductRepository {
     } catch (e) {
       print("e === $e");
     }
-    return Future.value(Tuple2(list, pageable));
+    return Future.value(Tuple2(list, pageable!));
   }
 
   Future<Product> find(int id) async {

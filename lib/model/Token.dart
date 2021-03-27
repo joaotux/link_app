@@ -1,7 +1,7 @@
 class Token {
-  String _token;
+  late String _token;
 
-  Token({String token}) {
+  Token({String token = ""}) {
     this._token = token;
   }
 

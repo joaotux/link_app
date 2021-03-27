@@ -5,7 +5,7 @@ import 'package:link_app/utils/colors_default.dart';
 
 class PageableDefault extends StatefulWidget with PreferredSizeWidget {
   PageableController pageableController;
-  PageableDefault({Key key, @required this.pageableController})
+  PageableDefault({Key? key, required this.pageableController})
       : super(key: key);
 
   @override
@@ -21,11 +21,11 @@ class _PageableDefaultState extends State<PageableDefault> {
     return Center(
       child: Observer(
           builder: (_) => widget.pageableController.pageable != null &&
-                  widget.pageableController.pageable.totalPages > 1
+                  widget.pageableController.pageable!.totalPages > 1
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    !widget.pageableController.pageable.first
+                    !widget.pageableController.pageable!.first
                         ? GestureDetector(
                             child: Icon(
                               Icons.arrow_left,
@@ -38,9 +38,9 @@ class _PageableDefaultState extends State<PageableDefault> {
                           )
                         : Container(),
                     for (int i = 0;
-                        i < widget.pageableController.pageable.totalPages;
+                        i < widget.pageableController.pageable!.totalPages;
                         i++)
-                      widget.pageableController.pageable.number == i
+                      widget.pageableController.pageable!.number == i
                           ? GestureDetector(
                               child: Container(
                                 alignment: Alignment.center,
@@ -76,7 +76,7 @@ class _PageableDefaultState extends State<PageableDefault> {
                                   ),
                                 ),
                               )),
-                    !widget.pageableController.pageable.last
+                    !widget.pageableController.pageable!.last
                         ? GestureDetector(
                             child: Icon(
                               Icons.arrow_right,

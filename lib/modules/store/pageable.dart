@@ -1,20 +1,20 @@
 class Pageable {
-  int _totalPages;
-  int _totalElements;
-  int _number;
-  int _numberOfElements;
-  bool _first;
-  bool _last;
-  bool _empty;
+  late int _totalPages;
+  late int _totalElements;
+  late int _number;
+  late int _numberOfElements;
+  late bool _first;
+  late bool _last;
+  late bool _empty;
 
   Pageable(
-      {int totalPages,
-      int totalElements,
-      int number,
-      int numberOfElements,
-      bool first,
-      bool last,
-      bool empty}) {
+      {int totalPages = 0,
+      int totalElements = 0,
+      int number = 0,
+      int numberOfElements = 0,
+      bool first = false,
+      bool last = false,
+      bool empty = false}) {
     this._totalPages = totalPages;
     this._totalElements = totalElements;
     this._number = number;

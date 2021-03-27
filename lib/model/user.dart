@@ -1,18 +1,18 @@
 class User {
-  String _id;
-  String _email;
-  String _password;
-  int _number;
+  String? _id;
+  late String _email;
+  late String _password;
+  late int _number;
 
-  User({String id, String email, String password, int number}) {
+  User({String? id, String email = "", String password = "", int number = 0}) {
     this._id = id;
     this._email = email;
     this._password = password;
     this._number = number;
   }
 
-  String get id => _id;
-  set id(String id) => _id = id;
+  String? get id => _id;
+  set id(String? id) => _id = id;
   String get email => _email;
   set email(String email) => _email = email;
   String get password => _password;

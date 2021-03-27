@@ -1,14 +1,14 @@
 class Provider {
-  int _id;
-  String _name;
+  int? _id;
+  late String _name;
 
-  Provider({int id, String name}) {
+  Provider({int? id, String name = ""}) {
     this._id = id;
     this._name = name;
   }
 
-  int get id => _id;
-  set id(int id) => _id = id;
+  int? get id => _id;
+  set id(int? id) => _id = id;
   String get name => _name;
   set name(String name) => _name = name;
 

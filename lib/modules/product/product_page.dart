@@ -18,8 +18,8 @@ import 'package:link_app/utils/widgets/responsive_layout.dart';
 import 'package:link_app/utils/widgets/tex_form_fiel01.dart';
 
 class ProductPage extends StatefulWidget {
-  int id;
-  ProductPage({Key key, this.id}) : super(key: key);
+  int? id;
+  ProductPage({Key? key, this.id}) : super(key: key);
 
   @override
   _ProductPageState createState() => _ProductPageState();
@@ -120,7 +120,8 @@ class _ProductPageState extends State<ProductPage> {
                                               Radius.circular(5.0)),
                                         ),
                                       ),
-                                      child: FutureBuilder(
+                                      child:
+                                          FutureBuilder<List<ProductCategory>>(
                                         future: _listCategories(),
                                         builder: (context, snapshot) {
                                           switch (snapshot.connectionState) {
@@ -130,7 +131,6 @@ class _ProductPageState extends State<ProductPage> {
                                               return CircularProgressIndicator(
                                                 strokeWidth: 2.0,
                                               );
-                                              break;
                                             case ConnectionState.done:
                                               if (snapshot.hasData) {
                                                 return DropdownButton<
@@ -145,7 +145,7 @@ class _ProductPageState extends State<ProductPage> {
                                                     hint: Text(
                                                         "Seleciona uma categoria"),
                                                     value: _category,
-                                                    items: snapshot.data.map<
+                                                    items: snapshot.data!.map<
                                                             DropdownMenuItem<
                                                                 ProductCategory>>(
                                                         (ProductCategory pc) {
@@ -157,7 +157,7 @@ class _ProductPageState extends State<ProductPage> {
                                                     }).toList(),
                                                     onChanged: (value) {
                                                       setState(() {
-                                                        _category = value;
+                                                        _category = value!;
                                                       });
                                                     });
                                               }
@@ -274,20 +274,17 @@ class _ProductPageState extends State<ProductPage> {
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder())),
                             suggestionsCallback: (pattern) async {
-                              if (pattern.isNotEmpty)
-                                return await _providerRepository.list(
-                                    pattern, _key);
+                              return await _providerRepository.list(
+                                  pattern, _key);
                             },
                             itemBuilder: (context, suggestion) {
-                              Provider p = suggestion;
+                              Provider? p = suggestion as Provider;
                               return ListTile(
-                                leading: Icon(Icons.person),
-                                title: Text(p.name),
-                                subtitle: Text('test'),
-                              );
+                                  leading: Icon(Icons.person),
+                                  title: Text(p.name));
                             },
                             onSuggestionSelected: (suggestion) {
-                              Provider p = suggestion;
+                              Provider? p = suggestion as Provider;
                               _nameController.text = p.name;
                               _provider = p;
                             },
@@ -375,9 +372,9 @@ class _ProductPageState extends State<ProductPage> {
 
     ProductStock stoke = ProductStock(
       id: _idStock,
-      amount: stockCurrent,
-      min: stockMin,
-      max: stockMax,
+      amount: stockCurrent.toDouble(),
+      min: stockMin.toDouble(),
+      max: stockMax.toDouble(),
       description: "",
     );
 
@@ -386,8 +383,8 @@ class _ProductPageState extends State<ProductPage> {
         description: description,
         code: code,
         barCode: barCode,
-        priceSales: sales,
-        priceCost: cost,
+        priceSales: sales.toDouble(),
+        priceCost: cost.toDouble(),
         note: note,
         category: _category,
         provider: _provider,
@@ -413,7 +410,7 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   var _nameController = TextEditingController();
-  Provider _provider;
+  Provider? _provider;
   bool _loaderCreate = false;
   bool _loaderPage = true;
   bool seeProvider = false;
@@ -439,8 +436,8 @@ class _ProductPageState extends State<ProductPage> {
   var _providerRepository = ProviderRepository();
   var _key = GlobalKey<ScaffoldState>();
 
-  List<ProductCategory> _categories;
-  ProductCategory _category;
+  List<ProductCategory> _categories = [];
+  ProductCategory? _category;
 
   double _width(BuildContext context, double porcent) {
     return (MediaQuery.of(context).size.width * porcent) / 100;
@@ -457,10 +454,10 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Future _find() async {
-    _id = ModalRoute.of(context).settings.arguments;
+    _id = ModalRoute.of(context)!.settings.arguments;
     if (_id != null) {
       Product product = await _repository.find(_id);
-      _idStock = product.stocks.elementAt(0).id;
+      _idStock = product.stocks!.elementAt(0).id;
       await _listCategories();
       _loadDatas(product);
     }
@@ -470,7 +467,7 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Future<List<ProductCategory>> _listCategories() async {
-    if (_categories == null) {
+    if (_categories.length == 0) {
       _categories = await _prodCatRepository.list();
     }
     return Future.value(_categories);
@@ -483,9 +480,9 @@ class _ProductPageState extends State<ProductPage> {
     _salesController.text = MoneyFormat.format(product.priceSales);
     _costController.text = MoneyFormat.format(product.priceCost);
 
-    double amount = product.stocks.elementAt(0).amount;
-    double max = product.stocks.elementAt(0).max;
-    double min = product.stocks.elementAt(0).min;
+    double amount = product.stocks!.elementAt(0).amount;
+    double max = product.stocks!.elementAt(0).max;
+    double min = product.stocks!.elementAt(0).min;
 
     _stockCurrentController.text = MoneyFormat.format(amount);
     _stockMaxController.text = MoneyFormat.format(max);
@@ -494,10 +491,10 @@ class _ProductPageState extends State<ProductPage> {
 
     _provider = product.provider;
     _nameController.text =
-        product.provider != null ? product.provider.name : "";
+        product.provider != null ? product.provider!.name : "";
 
     for (var cat in _categories) {
-      if (product.category != null && cat.id == product.category.id)
+      if (product.category != null && cat.id == product.category!.id)
         _category = cat;
     }
   }

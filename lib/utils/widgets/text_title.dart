@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class TextTitle extends StatelessWidget {
   const TextTitle({
-    Key key,
-    @required this.title,
-    this.context,
+    Key? key,
+    required this.title,
+    required this.context,
   }) : super(key: key);
 
   final String title;
@@ -15,7 +15,7 @@ class TextTitle extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-          color: Theme.of(context).primaryTextTheme.subtitle1.color,
+          color: Theme.of(context).primaryTextTheme.subtitle1!.color,
           fontSize: 25),
     );
   }

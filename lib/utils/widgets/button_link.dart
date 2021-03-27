@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ButtonLink extends StatelessWidget {
   final String title;
-  final Function function;
-  EdgeInsetsGeometry margin;
+  final GestureTapCallback? function;
+  EdgeInsetsGeometry? margin;
   ButtonLink(
-      {Key key, @required this.title, @required this.function, this.margin})
+      {Key? key, required this.title, required this.function, this.margin})
       : super(key: key);
 
   @override
