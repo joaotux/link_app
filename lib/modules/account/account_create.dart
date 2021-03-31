@@ -100,6 +100,7 @@ class _AccountCreateState extends State<AccountCreate> {
                       hintText: " E-mail",
                       controller: _email01Controller,
                       margin: EdgeInsets.only(top: 6, bottom: 6),
+                      mandatory: true,
                       validation: (value) {
                         if (value!.isEmpty) {
                           return "Campo obrigatório";
@@ -113,6 +114,7 @@ class _AccountCreateState extends State<AccountCreate> {
                         hintText: " Repetir e-mail",
                         controller: _email02Controller,
                         margin: EdgeInsets.only(bottom: 6),
+                        mandatory: true,
                         validation: (value) {
                           if (value!.isEmpty) {
                             return "Campo obrigatório";
@@ -141,6 +143,7 @@ class _AccountCreateState extends State<AccountCreate> {
                         hintText: " Telefone",
                         format: [_phoneController],
                         margin: EdgeInsets.only(bottom: 6),
+                        mandatory: true,
                         validation: (value) {
                           if (value!.isEmpty) {
                             return "Campo obrigatório";

@@ -115,9 +115,7 @@ class _ProductListState extends State<ProductList> {
                                   child: Text("Nenhum produto encontrado"),
                                 );
                               }
-                              break;
                           }
-                          return Text("");
                         },
                       )),
             )),

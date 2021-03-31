@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:link_app/model/provider.dart';
 import 'package:link_app/modules/account/account_create.dart';
 import 'package:link_app/modules/forgout_password/forgout_password_page.dart';
 import 'package:link_app/modules/home/home_page.dart';
 import 'package:link_app/modules/login/login_page.dart';
 import 'package:link_app/modules/product/product_list.dart';
 import 'package:link_app/modules/product/product_page.dart';
+import 'package:link_app/modules/provider/provider_list.dart';
+import 'package:link_app/modules/provider/provider_page.dart';
 import 'package:link_app/utils/colors_default.dart';
 
 class MaterialAPP extends StatelessWidget {
@@ -22,7 +25,9 @@ class MaterialAPP extends StatelessWidget {
         "/forgout_password": (context) => ForgoutPasswordPage(),
         "/home": (context) => HomePage(),
         "/product": (context) => ProductList(),
-        "/product/form": (context) => ProductPage()
+        "/product/form": (context) => ProductPage(),
+        "/provider": (context) => ProviderList(),
+        "/provider/form": (context) => ProviderPage()
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

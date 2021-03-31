@@ -74,7 +74,9 @@ class _ProductPageState extends State<ProductPage> {
                         margin: EdgeInsets.only(bottom: 15),
                         width: MediaQuery.of(context).size.width,
                         child: TextFormField01(
-                            controller: _descriptionController, hintText: "")),
+                            mandatory: true,
+                            controller: _descriptionController,
+                            hintText: "")),
                     Wrap(
                       children: [
                         Container(
@@ -275,17 +277,17 @@ class _ProductPageState extends State<ProductPage> {
                                     border: OutlineInputBorder())),
                             suggestionsCallback: (pattern) async {
                               return await _providerRepository.list(
-                                  pattern, _key);
+                                  pattern, true, _key);
                             },
                             itemBuilder: (context, suggestion) {
                               Provider? p = suggestion as Provider;
                               return ListTile(
                                   leading: Icon(Icons.person),
-                                  title: Text(p.name));
+                                  title: Text(p.person!.name));
                             },
                             onSuggestionSelected: (suggestion) {
                               Provider? p = suggestion as Provider;
-                              _nameController.text = p.name;
+                              _nameController.text = p.person!.name;
                               _provider = p;
                             },
                           ),
@@ -491,7 +493,7 @@ class _ProductPageState extends State<ProductPage> {
 
     _provider = product.provider;
     _nameController.text =
-        product.provider != null ? product.provider!.name : "";
+        product.provider != null ? product.provider!.person!.name : "";
 
     for (var cat in _categories) {
       if (product.category != null && cat.id == product.category!.id)

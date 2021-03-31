@@ -90,6 +90,11 @@ class _AppBarMenuState extends State<AppBarMenu> {
                       child: Text("Produto",
                           style: TextStyle(color: Colors.white, fontSize: 16)),
                     ),
+                    DropdownMenuItem(
+                      value: "/provider",
+                      child: Text("Fornecedor",
+                          style: TextStyle(color: Colors.white, fontSize: 16)),
+                    ),
                   ],
                   onChanged: (value) {
                     NavigatorTo.to(context, value.toString());

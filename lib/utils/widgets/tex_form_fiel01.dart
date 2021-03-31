@@ -10,6 +10,7 @@ class TextFormField01 extends StatefulWidget {
   EdgeInsetsGeometry? margin;
   String msgErro;
   FormFieldValidator<String>? validation;
+  bool mandatory;
 
   TextFormField01(
       {Key? key,
@@ -20,7 +21,8 @@ class TextFormField01 extends StatefulWidget {
       this.maxLines = 1,
       this.margin,
       this.msgErro = "Campo obrigatório",
-      this.validation})
+      this.validation,
+      this.mandatory = false})
       : super(key: key);
 
   @override
@@ -42,9 +44,11 @@ class _TextFormField01State extends State<TextFormField01> {
     return Container(
       margin: widget.margin,
       child: TextFormField(
-        validator: widget.validation == null
-            ? (value) => value!.isEmpty ? widget.msgErro : null
-            : widget.validation,
+        validator: widget.mandatory
+            ? widget.validation == null
+                ? (value) => value!.isEmpty ? widget.msgErro : null
+                : widget.validation
+            : null,
         controller: widget.controller,
         maxLines: widget.maxLines,
         inputFormatters: widget.format != null ? widget.format : [],
