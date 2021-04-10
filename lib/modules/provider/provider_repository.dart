@@ -12,17 +12,17 @@ import 'package:tuple/tuple.dart';
 class ProviderRepository {
   Response? _response;
 
-  Future<List<Provider>> list(
+  Future<List<ProviderDTO>> list(
       String name, bool active, GlobalKey<ScaffoldState> globalKey) async {
-    List<Provider> list = [];
+    List<ProviderDTO> list = [];
     try {
-      _response = await DioConfig.getDio().get(
-        "/provider/$name/$active",
+      _response = await DioConfig.getDioWithToken().get(
+        "/provider/list-no-page/$name/$active",
       );
 
       if (_response!.statusCode == 200) {
         for (var p in _response!.data) {
-          list.add(Provider.fromJson(p));
+          list.add(ProviderDTO.fromJson(p));
         }
       }
     } on DioError catch (e) {
@@ -37,7 +37,7 @@ class ProviderRepository {
     List<ProviderDTO> list = [];
     Pageable? pageable;
     try {
-      _response = await DioConfig.getDio().get(
+      _response = await DioConfig.getDioWithToken().get(
         "/provider/list/$name/$active?page=$currentPage",
       );
 
@@ -57,8 +57,8 @@ class ProviderRepository {
   Future<Provider> create(
       Provider provider, GlobalKey<ScaffoldState> key) async {
     try {
-      _response =
-          await DioConfig.getDio().post("/provider", data: provider.toJson());
+      _response = await DioConfig.getDioWithToken()
+          .post("/provider", data: provider.toJson());
 
       if (_response!.statusCode == 201) {
         provider = Provider.fromJson(_response!.data);
@@ -78,7 +78,7 @@ class ProviderRepository {
   Future<Provider> alter(
       int id, Provider provider, GlobalKey<ScaffoldState> key) async {
     try {
-      _response = await DioConfig.getDio()
+      _response = await DioConfig.getDioWithToken()
           .put("/provider/$id", data: provider.toJson());
 
       if (_response!.statusCode == 200) {
@@ -100,7 +100,7 @@ class ProviderRepository {
     late Provider provider;
 
     try {
-      _response = await DioConfig.getDio().get("/provider/$id");
+      _response = await DioConfig.getDioWithToken().get("/provider/$id");
 
       if (_response!.statusCode == 200) {
         provider = Provider.fromJson(_response!.data);
@@ -114,7 +114,7 @@ class ProviderRepository {
 
   Future delete(id, GlobalKey<ScaffoldState> key) async {
     try {
-      _response = await DioConfig.getDio().delete("/provider/$id");
+      _response = await DioConfig.getDioWithToken().delete("/provider/$id");
       print("_response!.statusCode ========== ${_response!.statusCode}");
       if (_response!.statusCode == 200) {}
     } on DioError catch (e) {

@@ -11,7 +11,7 @@ class CityRepository {
       String uf, String name, GlobalKey<ScaffoldState> globalKey) async {
     List<City> list = [];
     try {
-      _response = await DioConfig.getDio().get("/city/$uf/$name");
+      _response = await DioConfig.getDioWithToken().get("/city/$uf/$name");
 
       if (_response!.statusCode == 200) {
         for (var p in _response!.data) {

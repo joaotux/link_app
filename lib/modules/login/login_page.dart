@@ -61,7 +61,7 @@ class _LoginState extends State<Login> {
                       foregroundDecoration: BoxDecoration(
                     image: DecorationImage(
                         alignment: Alignment.centerLeft,
-                        image: NetworkImage("assets/images/image.jpg"),
+                        image: AssetImage("assets/images/image.jpg"),
                         fit: BoxFit.fitHeight),
                   )),
                 )

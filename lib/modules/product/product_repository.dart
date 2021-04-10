@@ -14,8 +14,8 @@ class ProductRepository {
   Future<Product> create(
       Product product, GlobalKey<ScaffoldState> globalKey) async {
     try {
-      _response =
-          await DioConfig.getDio().post("/product", data: product.toJson());
+      _response = await DioConfig.getDioWithToken()
+          .post("/product", data: product.toJson());
 
       if (_response.statusCode == 201) {
         product = Product.fromJson(_response.data);
@@ -37,7 +37,7 @@ class ProductRepository {
     List<Product> list = [];
     Pageable? pageable;
     try {
-      _response = await DioConfig.getDio()
+      _response = await DioConfig.getDioWithToken()
           .get("/product/list/$query?page=$currentPage");
 
       for (var p in _response.data['content']) {
@@ -53,7 +53,7 @@ class ProductRepository {
 
   Future<Product> find(int id) async {
     try {
-      _response = await DioConfig.getDio().get("/product/$id");
+      _response = await DioConfig.getDioWithToken().get("/product/$id");
     } catch (e) {
       print("e === $e");
     }

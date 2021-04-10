@@ -8,7 +8,7 @@ class ProductCategoryRepository {
   Future<List<ProductCategory>> list() async {
     List<ProductCategory> list = [];
     try {
-      _response = await DioConfig.getDio().get("/product-category");
+      _response = await DioConfig.getDioWithToken().get("/product-category");
       if (_response.statusCode == 200) {
         for (var pc in _response.data) {
           list.add(ProductCategory.fromJson(pc));

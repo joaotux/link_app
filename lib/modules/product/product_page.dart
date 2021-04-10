@@ -2,12 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:link_app/model/person/person.dart';
 import 'package:link_app/model/product/product.dart';
 import 'package:link_app/model/product/product_category.dart';
 import 'package:link_app/model/product/product_stock.dart';
 import 'package:link_app/model/provider.dart';
 import 'package:link_app/modules/product/product_repository.dart';
 import 'package:link_app/modules/product_category/product_category_repository.dart';
+import 'package:link_app/modules/provider/provider_dto.dart';
 import 'package:link_app/modules/provider/provider_repository.dart';
 import 'package:link_app/utils/colors_default.dart';
 import 'package:link_app/utils/number_format.dart';
@@ -280,15 +282,16 @@ class _ProductPageState extends State<ProductPage> {
                                   pattern, true, _key);
                             },
                             itemBuilder: (context, suggestion) {
-                              Provider? p = suggestion as Provider;
+                              ProviderDTO? p = suggestion as ProviderDTO;
                               return ListTile(
                                   leading: Icon(Icons.person),
-                                  title: Text(p.person!.name));
+                                  title: Text(p.name));
                             },
                             onSuggestionSelected: (suggestion) {
-                              Provider? p = suggestion as Provider;
-                              _nameController.text = p.person!.name;
-                              _provider = p;
+                              ProviderDTO? p = suggestion as ProviderDTO;
+                              _nameController.text = p.name;
+                              _provider = Provider(
+                                  id: p.id, fantasyName: "", person: Person());
                             },
                           ),
                         ))

@@ -12,10 +12,18 @@ class ReceitaWsRepository {
   Future<ReceitaWs> findCfpj(String cnpj, GlobalKey<ScaffoldState> key) async {
     ReceitaWs receitaWs = ReceitaWs();
     try {
-      response = await DioConfig.getDio().get("receitaWs/$cnpj");
+      response = await DioConfig.getDioWithToken().get("receitaWs/$cnpj");
 
       if (response!.statusCode == 200) {
         receitaWs = ReceitaWs.fromJson(response!.data);
+
+        if (receitaWs.status == "ERROR") {
+          SnackBarDefault.open(
+              scaffoldKey: key,
+              message: receitaWs.message,
+              color: Color(ColorsDefault.alertError),
+              colorText: Colors.white);
+        }
       } else if (response!.statusCode == 400) {
         SnackBarDefault.open(
             scaffoldKey: key,

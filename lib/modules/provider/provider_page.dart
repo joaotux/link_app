@@ -7,9 +7,6 @@ import 'package:link_app/model/person/city.dart';
 import 'package:link_app/model/person/person.dart';
 import 'package:link_app/model/person/phone.dart';
 import 'package:link_app/model/person/states.dart';
-import 'package:link_app/model/product/product.dart';
-import 'package:link_app/model/product/product_category.dart';
-import 'package:link_app/model/product/product_stock.dart';
 import 'package:link_app/model/provider.dart';
 import 'package:link_app/model/receita_ws.dart';
 import 'package:link_app/modules/city/city_repository.dart';
@@ -18,6 +15,7 @@ import 'package:link_app/modules/receita_ws/receita_ws_repository.dart';
 import 'package:link_app/modules/state/state_repository.dart';
 import 'package:link_app/utils/colors_default.dart';
 import 'package:link_app/utils/widgets/app_bar_menu.dart';
+import 'package:link_app/utils/widgets/bottom_menu_three_button.dart';
 import 'package:link_app/utils/widgets/button01.dart';
 import 'package:link_app/utils/widgets/field_form_with_description.dart';
 import 'package:link_app/utils/widgets/responsive_layout.dart';
@@ -271,7 +269,7 @@ class _ProviderPageState extends State<ProviderPage> {
                                                             OutlineInputBorder())),
                                             suggestionsCallback:
                                                 (pattern) async {
-                                              if (_states!.uf != "") {
+                                              if (_states != null) {
                                                 return await _cityRepository
                                                     .list(_states!.uf, pattern,
                                                         _key);
@@ -371,72 +369,29 @@ class _ProviderPageState extends State<ProviderPage> {
                     )),
               ),
       ),
-      bottomNavigationBar: Container(
-        alignment: Alignment.center,
-        color: Color(0xFFd9d9d9),
-        height: 80,
-        child: Padding(
-          padding: EdgeInsets.only(
-              left: ResponsiveLayout.isSmallScreen(context)
-                  ? 15
-                  : MediaQuery.of(context).size.width * 20 / 100,
-              right: ResponsiveLayout.isSmallScreen(context)
-                  ? 15
-                  : MediaQuery.of(context).size.width * 20 / 100),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Button01(
-                        loader: _loaderCreate,
-                        function: () async {
-                          if (_keyForm.currentState!.validate()) {
-                            Provider provider = _getDatas();
-                            setState(() {
-                              _loaderCreate = true;
-                            });
-                            if (_id == null)
-                              _create(provider);
-                            else
-                              _alter(_id, provider);
-                          }
-                        },
-                        title: "Salvar"),
-                  )),
-              Expanded(
-                  flex: 2,
-                  child: Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Button01(
-                      function: () async {
-                        Provider provider = _getDatas();
-                        setState(() {
-                          _loaderCreate = true;
-                        });
-                        provider = await _create(provider);
+      bottomNavigationBar: BottomMenuThreeButton(
+        loaderCreate: _loaderCreate,
+        functionSave: () async {
+          if (_keyForm.currentState!.validate()) {
+            Provider provider = _getDatas();
+            setState(() {
+              _loaderCreate = true;
+            });
+            if (_id == null)
+              _create(provider);
+            else
+              _alter(_id, provider);
+          }
+        },
+        functionSaveAndCreateNew: () async {
+          Provider provider = _getDatas();
+          setState(() {
+            _loaderCreate = true;
+          });
+          provider = await _create(provider);
 
-                        if (provider.id != null) _cleanDatas();
-                      },
-                      title: "Salvar e adicionar outro",
-                      color: Color(0xFFf2f2f2),
-                      colorText: Color(0xFF1a1a1a),
-                    ),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Button01(
-                    function: () {
-                      Navigator.pop(context);
-                    },
-                    title: "Listar",
-                    color: Color(0xFFf2f2f2),
-                    colorText: Color(0xFF0C66BB),
-                  )),
-            ],
-          ),
-        ),
+          if (provider.id != null) _cleanDatas();
+        },
       ),
     );
   }
@@ -491,8 +446,25 @@ class _ProviderPageState extends State<ProviderPage> {
 
   _cleanDatas() {
     _id = null;
+    _idAddr = null;
+    _idPers = null;
+    _idPhone1 = null;
+    _idPhone2 = null;
+    _active = true;
+
     _nameController.clear();
+    _fantasyNameController.clear();
     _cpfCnpjController.clear();
+    _streetController.clear();
+    _districtController.clear();
+    _zipCodeController.clear();
+    _numberController.clear();
+    _infoController.clear();
+    _stateNameController.clear();
+    _cityNameController.clear();
+    _emailController.clear();
+    _phone1Controller.clear();
+    _phone2Controller.clear();
   }
 
   bool _loaderCreate = false;
@@ -564,6 +536,8 @@ class _ProviderPageState extends State<ProviderPage> {
   Future<Provider> _create(Provider provider) async {
     if (_loaderCreate) {
       provider = await _repository.create(provider, _key);
+      _id = provider.id;
+      _loadDatas(provider);
       setState(() {
         _loaderCreate = false;
       });
@@ -593,6 +567,10 @@ class _ProviderPageState extends State<ProviderPage> {
   }
 
   Future _findCnpj(String cnpj) async {
+    setState(() {
+      _loaderPage = true;
+    });
+
     ReceitaWs receitaWs = await _receitaWsRepository.findCfpj(cnpj, _key);
     _nameController.text = receitaWs.nome;
     _fantasyNameController.text = receitaWs.fantasia;
@@ -603,6 +581,20 @@ class _ProviderPageState extends State<ProviderPage> {
     _districtController.text = receitaWs.bairro;
     _streetController.text = receitaWs.logradouro;
     _numberController.text = receitaWs.numero;
+
+    String uf = receitaWs.uf;
+    _states = await _stateRepository.find(uf, _key);
+    _stateNameController.text = _states!.name;
+
+    String nameCity = receitaWs.municipio;
+    await _cityRepository.list(uf, nameCity, _key).then((citys) {
+      _city = citys.elementAt(0);
+      _cityNameController.text = _city!.name;
+    });
+
+    setState(() {
+      _loaderPage = false;
+    });
   }
 
   _loadDatas(Provider provider) {

@@ -11,7 +11,7 @@ class StateRepository {
       String name, GlobalKey<ScaffoldState> globalKey) async {
     List<States> list = [];
     try {
-      _response = await DioConfig.getDio().get("/state/$name");
+      _response = await DioConfig.getDioWithToken().get("/state/$name");
 
       if (_response!.statusCode == 200) {
         for (var p in _response!.data) {
@@ -23,5 +23,20 @@ class StateRepository {
       DioErrorDefault.show(error: e, scaffoldKey: globalKey);
     }
     return list;
+  }
+
+  Future<States> find(String uf, GlobalKey<ScaffoldState> globalKey) async {
+    States state = States();
+    try {
+      _response = await DioConfig.getDioWithToken().get("/state/uf/$uf");
+
+      if (_response!.statusCode == 200) {
+        state = States.fromJson(_response!.data);
+      }
+    } on DioError catch (e) {
+      print("error ============= $e");
+      DioErrorDefault.show(error: e, scaffoldKey: globalKey);
+    }
+    return state;
   }
 }

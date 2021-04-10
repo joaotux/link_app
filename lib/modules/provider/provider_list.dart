@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:link_app/model/product/product.dart';
-import 'package:link_app/model/provider.dart';
-import 'package:link_app/modules/product/product_repository.dart';
 import 'package:link_app/modules/provider/provider_dto.dart';
 import 'package:link_app/modules/provider/provider_repository.dart';
 import 'package:link_app/modules/store/pageable_controller.dart';
@@ -11,6 +8,7 @@ import 'package:link_app/utils/navigator_to.dart';
 import 'package:link_app/utils/widgets/alert_dialog_defaul.dart';
 import 'package:link_app/utils/widgets/app_bar_menu.dart';
 import 'package:link_app/utils/widgets/button01.dart';
+import 'package:link_app/utils/widgets/edit_and_remove.dart';
 import 'package:link_app/utils/widgets/pageable_defaul.dart';
 import 'package:link_app/utils/widgets/responsive_layout.dart';
 import 'package:link_app/utils/widgets/textfiel01.dart';
@@ -44,43 +42,7 @@ class _ProviderListState extends State<ProviderList> {
             Container(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 10,
-                        child: TextField01(
-                          margin: EdgeInsets.only(right: 15),
-                          controller: _queryController,
-                          hintText: "Nome ou CNPJ/CPF",
-                        )),
-                    Row(
-                      children: [
-                        Text("Ativos: "),
-                        Checkbox(
-                            value: _active,
-                            onChanged: (value) {
-                              setState(() {
-                                _active = value!;
-                              });
-                            })
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: GestureDetector(
-                        child: Icon(
-                          Icons.search,
-                          size: 35,
-                          color: Color(ColorsDefault.primary),
-                        ),
-                        onTap: () {
-                          _pageable.setCurrentPage(0);
-                          setState(() {});
-                        },
-                      ),
-                    )
-                  ],
-                ),
+                child: _searcher(),
               ),
             ),
             Padding(
@@ -88,8 +50,9 @@ class _ProviderListState extends State<ProviderList> {
               child: Button01(
                 width: 80,
                 height: 30,
-                function: () {
-                  NavigatorTo.to(context, "/provider/form");
+                function: () async {
+                  await NavigatorTo.to(context, "/provider/form");
+                  setState(() {});
                 },
                 title: "Novo",
               ),
@@ -122,59 +85,26 @@ class _ProviderListState extends State<ProviderList> {
                                           margin: EdgeInsets.only(bottom: 2),
                                           child: ListTile(
                                             title: Text("${provider.name}"),
-                                            trailing: Container(
-                                              width: 70,
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        right: 10),
-                                                    child: GestureDetector(
-                                                      onTap: () async {
-                                                        await Navigator
-                                                            .pushNamed(context,
-                                                                "/provider/form",
-                                                                arguments:
-                                                                    provider
-                                                                        .id);
-                                                        setState(() {});
-                                                      },
-                                                      child: Icon(
-                                                        Icons.edit_sharp,
-                                                        color: Colors.blue,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        right: 10),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        AlertDialogDefault.show(
-                                                            context: context,
-                                                            title: "Alerta",
-                                                            message:
-                                                                "Deseja mesmo remover este registro?",
-                                                            function: () async {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              _repository
-                                                                  .delete(
-                                                                      provider
-                                                                          .id,
-                                                                      _key);
-                                                              setState(() {});
-                                                            });
-                                                      },
-                                                      child: Icon(
-                                                        Icons
-                                                            .delete_forever_rounded,
-                                                        color: Colors.red,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                            trailing: EditAndRemove(
+                                              functionEdit: () async {
+                                                await Navigator.pushNamed(
+                                                    context, "/provider/form",
+                                                    arguments: provider.id);
+                                                setState(() {});
+                                              },
+                                              functionRemove: () {
+                                                AlertDialogDefault.show(
+                                                    context: context,
+                                                    title: "Alerta",
+                                                    message:
+                                                        "Deseja mesmo remover este registro?",
+                                                    function: () async {
+                                                      await _repository.delete(
+                                                          provider.id, _key);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    });
+                                              },
                                             ),
                                           ),
                                         );
@@ -195,6 +125,46 @@ class _ProviderListState extends State<ProviderList> {
           ],
         ),
       ),
+    );
+  }
+
+  Row _searcher() {
+    return Row(
+      children: [
+        Expanded(
+            flex: 10,
+            child: TextField01(
+              margin: EdgeInsets.only(right: 15),
+              controller: _queryController,
+              hintText: "Nome ou CNPJ/CPF",
+            )),
+        Row(
+          children: [
+            Text("Ativos: "),
+            Checkbox(
+                value: _active,
+                onChanged: (value) {
+                  setState(() {
+                    _active = value!;
+                  });
+                })
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: GestureDetector(
+            child: Icon(
+              Icons.search,
+              size: 35,
+              color: Color(ColorsDefault.primary),
+            ),
+            onTap: () {
+              _pageable.setCurrentPage(0);
+              setState(() {});
+            },
+          ),
+        )
+      ],
     );
   }
 

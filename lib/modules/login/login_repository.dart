@@ -36,7 +36,7 @@ class LoginRepository {
         SnackBarDefault.open(
             scaffoldKey: scaffoldKey,
             message: "E-mail ou senha inválidos",
-            color: Color(0xFF808080),
+            color: Color(0xFFff4d4d),
             colorText: Colors.white);
       } else {
         DioErrorDefault.show(error: e, scaffoldKey: scaffoldKey);
