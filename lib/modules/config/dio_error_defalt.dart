@@ -8,6 +8,8 @@ class DioErrorDefault {
     String messageErro = "";
     color = color == null ? Color(0xFFff4d4d) : color;
 
+    print("erro: $error");
+
     if (error!.message.contains("Connection refused")) {
       messageErro = "Verifique o seu acesso a internet";
     } else if (error.response != null) {

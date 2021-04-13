@@ -59,4 +59,13 @@ class ProductRepository {
     }
     return Product.fromJson(_response.data);
   }
+
+  Future delete(id, GlobalKey<ScaffoldState> key) async {
+    try {
+      _response = await DioConfig.getDioWithToken().delete('/product/$id');
+    } on DioError catch (e) {
+      print("error ============= $e");
+      DioErrorDefault.show(error: e, scaffoldKey: key);
+    }
+  }
 }

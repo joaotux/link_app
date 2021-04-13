@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:link_app/model/product/product.dart';
-import 'package:link_app/modules/product/product_repository.dart';
+import 'package:link_app/model/service.dart';
+import 'package:link_app/modules/provider/provider_dto.dart';
+import 'package:link_app/modules/provider/provider_repository.dart';
+import 'package:link_app/modules/service/service_repository.dart';
 import 'package:link_app/modules/store/pageable_controller.dart';
 import 'package:link_app/utils/colors_default.dart';
 import 'package:link_app/utils/navigator_to.dart';
@@ -14,14 +16,14 @@ import 'package:link_app/utils/widgets/responsive_layout.dart';
 import 'package:link_app/utils/widgets/textfiel01.dart';
 import 'package:tuple/tuple.dart';
 
-class ProductList extends StatefulWidget {
-  ProductList({Key? key}) : super(key: key);
+class ServiceList extends StatefulWidget {
+  ServiceList({Key? key}) : super(key: key);
 
   @override
-  _ProductListState createState() => _ProductListState();
+  _ServiceListState createState() => _ServiceListState();
 }
 
-class _ProductListState extends State<ProductList> {
+class _ServiceListState extends State<ServiceList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,31 +44,7 @@ class _ProductListState extends State<ProductList> {
             Container(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 12,
-                        child: TextField01(
-                          controller: _queryController,
-                          hintText:
-                              "Descrição, código produto ou código de barras",
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: GestureDetector(
-                        child: Icon(
-                          Icons.search,
-                          size: 35,
-                          color: Color(ColorsDefault.primary),
-                        ),
-                        onTap: () {
-                          _pageable.setCurrentPage(0);
-                          setState(() {});
-                        },
-                      ),
-                    )
-                  ],
-                ),
+                child: _searcher(),
               ),
             ),
             Padding(
@@ -75,7 +53,7 @@ class _ProductListState extends State<ProductList> {
                 width: 80,
                 height: 30,
                 function: () async {
-                  await NavigatorTo.to(context, "/product/form");
+                  await NavigatorTo.to(context, "/service/form");
                   setState(() {});
                 },
                 title: "Novo",
@@ -85,7 +63,7 @@ class _ProductListState extends State<ProductList> {
                 child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Observer(
-                  builder: (_) => FutureBuilder<List<Product>>(
+                  builder: (_) => FutureBuilder<List<Service>>(
                         future: _list(),
                         builder: (context, snapshot) {
                           switch (snapshot.connectionState) {
@@ -102,15 +80,15 @@ class _ProductListState extends State<ProductList> {
                                   child: ListView.builder(
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        Product product = snapshot.data![index];
+                                        Service service = snapshot.data![index];
                                         return Container(
                                           color: Color(0xFFf2f2f2),
                                           margin: EdgeInsets.only(bottom: 2),
                                           child: ListTile(
                                             title:
-                                                Text("${product.description}"),
+                                                Text("${service.description}"),
                                             subtitle: Text(
-                                              "Cód: ${product.code}",
+                                              "Cód: ${service.code}",
                                               style: TextStyle(
                                                   color: Colors.blue,
                                                   fontSize: 13),
@@ -118,8 +96,8 @@ class _ProductListState extends State<ProductList> {
                                             trailing: EditAndRemove(
                                               functionEdit: () async {
                                                 await Navigator.pushNamed(
-                                                    context, "/product/form",
-                                                    arguments: product.id);
+                                                    context, "/service/form",
+                                                    arguments: service.id);
                                                 setState(() {});
                                               },
                                               functionRemove: () {
@@ -130,7 +108,7 @@ class _ProductListState extends State<ProductList> {
                                                         "Deseja mesmo remover este registro?",
                                                     function: () async {
                                                       await _repository.delete(
-                                                          product.id, _key);
+                                                          service.id!, _key);
                                                       Navigator.pop(context);
                                                       setState(() {});
                                                     });
@@ -142,7 +120,7 @@ class _ProductListState extends State<ProductList> {
                                 );
                               } else {
                                 return Center(
-                                  child: Text("Nenhum produto encontrado"),
+                                  child: Text("Nenhum serviço encontrado"),
                                 );
                               }
                           }
@@ -158,16 +136,59 @@ class _ProductListState extends State<ProductList> {
     );
   }
 
+  Row _searcher() {
+    return Row(
+      children: [
+        Expanded(
+            flex: 10,
+            child: TextField01(
+              margin: EdgeInsets.only(right: 15),
+              controller: _queryController,
+              hintText: "Descrição ou código",
+            )),
+        Row(
+          children: [
+            Text("Ativos: "),
+            Checkbox(
+                value: _active,
+                onChanged: (value) {
+                  setState(() {
+                    _active = value!;
+                  });
+                })
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: GestureDetector(
+            child: Icon(
+              Icons.search,
+              size: 35,
+              color: Color(ColorsDefault.primary),
+            ),
+            onTap: () {
+              _pageable.setCurrentPage(0);
+              setState(() {});
+            },
+          ),
+        )
+      ],
+    );
+  }
+
+  var _key = GlobalKey<ScaffoldState>();
   PageableController _pageable = PageableController();
-  Future<List<Product>> _list() async {
+
+  Future<List<Service>> _list() async {
     String query = _queryController.text;
-    Tuple2 tuple = await _repository.list(query, _pageable.currentPage);
-    List<Product> list = tuple.item1;
+    Tuple2 tuple =
+        await _repository.list(query, _active, _pageable.currentPage, _key);
+    List<Service> list = tuple.item1;
     _pageable.setPageable(tuple.item2);
     return list;
   }
 
-  var _key = GlobalKey<ScaffoldState>();
-  var _repository = ProductRepository();
+  var _repository = ServiceRepository();
   var _queryController = TextEditingController();
+  bool _active = true;
 }

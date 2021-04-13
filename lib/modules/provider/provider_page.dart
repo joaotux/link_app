@@ -14,7 +14,7 @@ import 'package:link_app/modules/provider/provider_repository.dart';
 import 'package:link_app/modules/receita_ws/receita_ws_repository.dart';
 import 'package:link_app/modules/state/state_repository.dart';
 import 'package:link_app/utils/colors_default.dart';
-import 'package:link_app/utils/widgets/app_bar_menu.dart';
+import 'package:link_app/modules/store/app_bar_menu.dart';
 import 'package:link_app/utils/widgets/bottom_menu_three_button.dart';
 import 'package:link_app/utils/widgets/button01.dart';
 import 'package:link_app/utils/widgets/field_form_with_description.dart';
@@ -465,6 +465,8 @@ class _ProviderPageState extends State<ProviderPage> {
     _emailController.clear();
     _phone1Controller.clear();
     _phone2Controller.clear();
+    _states = null;
+    _city = null;
   }
 
   bool _loaderCreate = false;

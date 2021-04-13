@@ -13,7 +13,8 @@ import 'package:link_app/modules/provider/provider_dto.dart';
 import 'package:link_app/modules/provider/provider_repository.dart';
 import 'package:link_app/utils/colors_default.dart';
 import 'package:link_app/utils/number_format.dart';
-import 'package:link_app/utils/widgets/app_bar_menu.dart';
+import 'package:link_app/modules/store/app_bar_menu.dart';
+import 'package:link_app/utils/widgets/bottom_menu_three_button.dart';
 import 'package:link_app/utils/widgets/button01.dart';
 import 'package:link_app/utils/widgets/field_form_with_description.dart';
 import 'package:link_app/utils/widgets/responsive_layout.dart';
@@ -291,7 +292,7 @@ class _ProductPageState extends State<ProductPage> {
                               ProviderDTO? p = suggestion as ProviderDTO;
                               _nameController.text = p.name;
                               _provider = Provider(
-                                  id: p.id, fantasyName: "", person: Person());
+                                  id: p.id, fantasyName: "", active: true);
                             },
                           ),
                         ))
@@ -299,68 +300,24 @@ class _ProductPageState extends State<ProductPage> {
                 ),
               ),
       ),
-      bottomNavigationBar: Container(
-        alignment: Alignment.center,
-        color: Color(0xFFd9d9d9),
-        height: 80,
-        child: Padding(
-          padding: EdgeInsets.only(
-              left: ResponsiveLayout.isSmallScreen(context)
-                  ? 15
-                  : MediaQuery.of(context).size.width * 20 / 100,
-              right: ResponsiveLayout.isSmallScreen(context)
-                  ? 15
-                  : MediaQuery.of(context).size.width * 20 / 100),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Button01(
-                        loader: _loaderCreate,
-                        function: () async {
-                          Product product = _getDatas();
-                          setState(() {
-                            _loaderCreate = true;
-                          });
-                          _create(product);
-                        },
-                        title: "Salvar"),
-                  )),
-              Expanded(
-                  flex: 2,
-                  child: Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Button01(
-                      function: () async {
-                        Product product = _getDatas();
-                        setState(() {
-                          _loaderCreate = true;
-                        });
-                        product = await _create(product);
+      bottomNavigationBar: BottomMenuThreeButton(
+          loaderCreate: _loaderCreate,
+          functionSave: () async {
+            Product product = _getDatas();
+            setState(() {
+              _loaderCreate = true;
+            });
+            _create(product);
+          },
+          functionSaveAndCreateNew: () async {
+            Product product = _getDatas();
+            setState(() {
+              _loaderCreate = true;
+            });
+            product = await _create(product);
 
-                        if (product.id != null) _cleanDatas();
-                      },
-                      title: "Salvar e adicionar outro",
-                      color: Color(0xFFf2f2f2),
-                      colorText: Color(0xFF1a1a1a),
-                    ),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Button01(
-                    function: () {
-                      Navigator.pop(context);
-                    },
-                    title: "Listar",
-                    color: Color(0xFFf2f2f2),
-                    colorText: Color(0xFF0C66BB),
-                  )),
-            ],
-          ),
-        ),
-      ),
+            if (product.id != null) _cleanDatas();
+          }),
     );
   }
 

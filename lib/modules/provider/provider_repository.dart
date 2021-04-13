@@ -115,7 +115,6 @@ class ProviderRepository {
   Future delete(id, GlobalKey<ScaffoldState> key) async {
     try {
       _response = await DioConfig.getDioWithToken().delete("/provider/$id");
-      print("_response!.statusCode ========== ${_response!.statusCode}");
       if (_response!.statusCode == 200) {}
     } on DioError catch (e) {
       print("error ============= $e");

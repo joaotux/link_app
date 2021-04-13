@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:link_app/utils/token_utils.dart';
-import 'package:link_app/utils/widgets/app_bar_menu.dart';
+import 'package:link_app/modules/store/app_bar_menu.dart';
 import 'package:link_app/utils/shared_utils.dart';
 
 class HomePage extends StatefulWidget {

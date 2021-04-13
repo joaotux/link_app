@@ -8,6 +8,8 @@ import 'package:link_app/modules/product/product_list.dart';
 import 'package:link_app/modules/product/product_page.dart';
 import 'package:link_app/modules/provider/provider_list.dart';
 import 'package:link_app/modules/provider/provider_page.dart';
+import 'package:link_app/modules/service/service_list.dart';
+import 'package:link_app/modules/service/service_page.dart';
 import 'package:link_app/utils/colors_default.dart';
 
 class MaterialAPP extends StatelessWidget {
@@ -27,7 +29,9 @@ class MaterialAPP extends StatelessWidget {
         "/product": (context) => ProductList(),
         "/product/form": (context) => ProductPage(),
         "/provider": (context) => ProviderList(),
-        "/provider/form": (context) => ProviderPage()
+        "/provider/form": (context) => ProviderPage(),
+        "/service": (context) => ServiceList(),
+        "/service/form": (context) => ServicePage()
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

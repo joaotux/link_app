@@ -5,7 +5,7 @@ import 'package:link_app/utils/token_utils.dart';
 class DioConfig {
   static Dio _dio = Dio();
   static final _tokenUtils = GetIt.I.get<TokenUtils>();
-  static const String _URL = 'http://10.0.0.192:8080/';
+  static const String _URL = 'http://10.0.0.193:8080/';
 
   static Dio getDio() {
     _dio.options.baseUrl = _URL;

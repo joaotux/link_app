@@ -8,6 +8,7 @@ class Provider {
 
   Provider(
       {int? id, bool active = true, String fantasyName = "", Person? person}) {
+    this._id = id;
     this._fantasyName = fantasyName;
     this._active = active;
     this._person = person;
